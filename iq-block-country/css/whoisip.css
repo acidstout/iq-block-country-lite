@@ -1,0 +1,11 @@
+.hidden {
+	display: none;
+}
+
+.whoisip {
+	cursor: pointer;
+}
+
+#whoisip-result pre {
+	white-space: normal;
+}
