@@ -1,5 +1,5 @@
 # iQ Block Country Lite
-This is a rewrite of Pascal's iQ Block Country plugin for WordPress. Please don't bother Pascal if you have issues with this plugin. If it doesn't work, you're on your own. I just created this version for myself and I'm sharing it with you for free. Don't expect any support from my side. If there's a bug it maybe gets fixed in the next version. or fix it yourself. This is open-source software.
+This is a rewrite of Pascal's iQ Block Country plugin for WordPress. Please don't bother Pascal if you have issues with this plugin. If it doesn't work, you're on your own. I just created this version for myself and I'm sharing it with you for free. Don't expect any support from my side. If there's a bug maybe it gets fixed in the next version. Or fix it yourself. This is open-source software.
 
 ## Description
 It allows or disallows visitors from certain countries accessing (parts of) your website.
