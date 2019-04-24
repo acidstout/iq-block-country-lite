@@ -2,7 +2,7 @@
 /*
  Plugin Name: iQ Block Country Lite
  Plugin URI: https://www.webence.nl/plugins/iq-block-country-the-wordpress-plugin-that-blocks-countries-for-you/
- Version: 1.2.3.1
+ Version: 1.2.4.1
  Author: Pascal, nrekow
  Author URI: https://www.webence.nl/
  Description: Block visitors from visiting your website and backend website based on which country their IP address is from. The Maxmind GeoIP lite database is used for looking up from which country an ip address is from.
@@ -14,6 +14,7 @@
 /* This script uses GeoLite Country from MaxMind (http://www.maxmind.com) which is available under terms of GPL/LGPL */
 
 /*  Copyright 2010-2019  Pascal  (email: pascal@webence.nl)
+    Copyright 2019       nrekow
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License, version 2, as
@@ -78,9 +79,17 @@ function iqblockcountry_localization() {
  */
 function iqblockcountry_get_ipaddress() {
 	global $ip_address;
-	
+
+	// Get IP address of server.
 	if (isset($_SERVER['SERVER_ADDR']) && !empty($_SERVER['SERVER_ADDR'])) {
+		// Apache, nginx, ...
 		$server_address = $_SERVER['SERVER_ADDR'];
+	} else if (isset($_SERVER['LOCAL_ADDR']) && !empty($_SERVER['LOCAL_ADDR'])) {
+		// On Window 7 IIS one must use $_SERVER['LOCAL_ADDR'] instead to get the server's IP address.
+		$server_address = $_SERVER['LOCAL_ADDR'];
+	} else if (isset($_SERVER['SERVER_NAME']) && !empty($_SERVER['SERVER_NAME']) && stristr(PHP_OS, 'WIN')) {
+		// Windows IIS v6 does not include $_SERVER['SERVER_ADDR']. This relies on a DNS lookup and may result in significant performance issues.
+		$server_address = gethostbyname($_SERVER['SERVER_NAME']);
 	}
 	if ( isset($_SERVER['HTTP_CF_CONNECTING_IP']) && !empty($_SERVER['HTTP_CF_CONNECTING_IP']) ) {
 		$ip_address = $_SERVER['HTTP_CF_CONNECTING_IP'];

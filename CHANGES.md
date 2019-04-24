@@ -1,5 +1,8 @@
 ## Changes
 
+1.2.4.1
+* Change: Improved server IP address detection on Windows IIS machines.
+
 1.2.3.1
 * Bugfix: Several bugs have been fixed (e.g. missing HTML close-tags, undefined indexes, redundant clauses and loops, ...). Too much to list them all.
 * Change: Code has been cleaned up and formatted properly.
