@@ -2,7 +2,7 @@
 /*
  Plugin Name: iQ Block Country Lite
  Plugin URI: https://www.webence.nl/plugins/iq-block-country-the-wordpress-plugin-that-blocks-countries-for-you/
- Version: 1.2.4.1
+ Version: 1.2.4.2
  Author: Pascal, nrekow
  Author URI: https://www.webence.nl/
  Description: Block visitors from visiting your website and backend website based on which country their IP address is from. The Maxmind GeoIP lite database is used for looking up from which country an ip address is from.
@@ -240,7 +240,7 @@ register_uninstall_hook(__file__, 'iqblockcountry_uninstall');
 
 
 if (!function_exists('is_user_logged_in')) {
-	include ABSPATH . 'wp-includes/pluggable.php';
+	include ABSPATH . WPINC . '/pluggable.php';
 }
 
 

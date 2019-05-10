@@ -1,5 +1,8 @@
 ## Changes
 
+1.2.4.2
+* Bugfix: Removed static reference to `wp-includes` folder. WordPress uses the `WPINC` constant to specify this folder, and thus the folder name can be overwritten in the `wp-config.php` file.
+
 1.2.4.1
 * Change: Improved server IP address detection on Windows IIS machines.
 
