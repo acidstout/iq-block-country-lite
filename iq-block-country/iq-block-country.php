@@ -211,7 +211,7 @@ define('DBVERSION', '122');
  * Whoisip extension
  * @author nrekow
  */
-define('JQUERYUICSS', get_home_url() . '/wp-includes/css/jquery-ui-dialog.min.css');
+define('JQUERYUICSS', get_home_url() . '/' . WPINC . '/css/jquery-ui-dialog.min.css');
 define('WHOISCSS', plugins_url('/css/whoisip.css', __FILE__));
 define('WHOISIPJS', plugins_url('/js/whoisip.js', __FILE__));
 
