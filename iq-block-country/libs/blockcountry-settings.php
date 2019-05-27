@@ -226,6 +226,7 @@ function iqblockcountry_register_mysettings() {
 	register_setting ( 'iqblockcountry-settings-group-frontend', 'blockcountry_blocksearch' );
 	register_setting ( 'iqblockcountry-settings-group-frontend', 'blockcountry_blockfrontend' );
 	register_setting ( 'iqblockcountry-settings-group-frontend', 'blockcountry_blocktag' );
+	register_setting ( 'iqblockcountry-settings-group-frontend', 'blockcountry_blockfeed' );
 	register_setting ( 'iqblockcountry-settings-group-pages', 'blockcountry_blockpages');
 	register_setting ( 'iqblockcountry-settings-group-pages', 'blockcountry_blockpages_inverse');
 	register_setting ( 'iqblockcountry-settings-group-pages', 'blockcountry_pages');
@@ -253,7 +254,7 @@ function iqblockcountry_get_options_arr() {
 		'blockcountry_blockhome','blockcountry_nrstatistics','blockcountry_daysstatistics','blockcountry_lookupstatistics',
 		'blockcountry_redirect','blockcountry_redirect_url','blockcountry_allowse',
 		'blockcountry_debuglogging','blockcountry_buffer','blockcountry_accessibility','blockcountry_ipoverride','blockcountry_logging','blockcountry_blockposttypes',
-		'blockcountry_posttypes','blockcountry_blocksearch','blockcountry_adminajax','blockcountry_blocktag','blockcountry_blocktags','blockcountry_tags'
+		'blockcountry_posttypes','blockcountry_blocksearch','blockcountry_adminajax','blockcountry_blocktag','blockcountry_blockfeed','blockcountry_blocktags','blockcountry_tags'
 	);
 	return apply_filters( 'iqblockcountry_options', $optarr );
 }
@@ -268,6 +269,7 @@ function iqblockcountry_set_defaults() {
 	$server_addr = array_key_exists( 'SERVER_ADDR', $_SERVER ) ? $_SERVER['SERVER_ADDR'] : $_SERVER['LOCAL_ADDR'];
 
 	if (get_option('blockcountry_blockfrontend')			=== false) { update_option('blockcountry_blockfrontend' , 'on'); }
+	if (get_option('blockcountry_blockfeed')                === false) { update_option('blockcountry_blockfeed' , 'on'); }
 	if (get_option('blockcountry_backendnrblocks')			=== false) { update_option('blockcountry_backendnrblocks', 0); }
 	if (get_option('blockcountry_frontendnrblocks')			=== false) { update_option('blockcountry_frontendnrblocks', 0); }
 	if (get_option('blockcountry_header')					=== false) { update_option('blockcountry_header', 'on'); }
@@ -331,6 +333,7 @@ function iqblockcountry_uninstall() {
 	delete_option('blockcountry_adminajax');
 	delete_option('blockcountry_blocktag');
 	delete_option('blockcountry_blocktags');
+	delete_option('blockcountry_blockfeed');
 	delete_option('blockcountry_tags');
 }
 
@@ -914,6 +917,10 @@ function iqblockcountry_settings_frontend() {
 					<?php _e('If you select this option tag pages will be blocked.', 'iq-block-country');?>
 				</th>
 				<td width="70%"><input type="checkbox" name="blockcountry_blocktag" <?php checked('on', get_option('blockcountry_blocktag'), true);?>/></td>
+			</tr>
+			<tr valign="top">
+				<th width="30%"><?php _e('Block feed:', 'iq-block-country');?><br/><?php _e('If you select this option feed pages will be blocked.', 'iq-block-country');?></th>
+				<td width="70%"><input type="checkbox" name="blockcountry_blockfeed" <?php checked('on', get_option('blockcountry_blockfeed'), true);?>/></td>
 			</tr>
 			<tr valign="top">
 				<th width="30%"><?php _e('Frontend whitelist IPv4 and/or IPv6 addresses:', 'iq-block-country');?><br/><?php _e('Use a semicolon (;) to separate IP addresses', 'iq-block-country'); ?><br /><?php _e('This field accepts single IP addresses as well as ranges in CIDR format.', 'iq-block-country');?></th>

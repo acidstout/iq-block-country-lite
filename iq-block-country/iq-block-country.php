@@ -2,7 +2,7 @@
 /*
  Plugin Name: iQ Block Country Lite
  Plugin URI: https://www.webence.nl/plugins/iq-block-country-the-wordpress-plugin-that-blocks-countries-for-you/
- Version: 1.2.4.2
+ Version: 1.2.5.1
  Author: Pascal, nrekow
  Author URI: https://www.webence.nl/
  Description: Block visitors from visiting your website and backend website based on which country their IP address is from. The Maxmind GeoIP lite database is used for looking up from which country an ip address is from.
@@ -141,7 +141,9 @@ function iqblockcountry_upgrade() {
 	$dbversion = get_option( 'blockcountry_version' );
 	update_option('blockcountry_version',VERSION);
 	
-	if ($dbversion != "" && version_compare($dbversion, "1.2.3", '<') ) {
+	if ($dbversion != "" && version_compare($dbversion, "1.2.5", '<') ) {
+		update_option('blockcountry_blockfeed' , 'on');
+	} elseif ($dbversion != "" && version_compare($dbversion, "1.2.3", '<') ) {
 		update_option('blockcountry_ipoverride' , 'NONE');
 	} elseif ($dbversion != "" && version_compare($dbversion, "1.2.2", '<') ) {
 		//iqblockcountry_find_geoip_location();
@@ -203,7 +205,7 @@ define('CHOSENCUSTOM', plugins_url('/js/chosen.custom.js', __FILE__));
 define('PLUGINPATH', plugin_dir_path( __FILE__ ));
 define('GEOIP2DB', 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz'); // Used to display download location.
 define('GEOIP2DBFILE', PLUGINPATH . '/db/GeoLite2-Country.mmdb');
-define('VERSION', '1.2.3');
+define('VERSION', '1.2.5');
 define('DBVERSION', '122');
 
 

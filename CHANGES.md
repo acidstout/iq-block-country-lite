@@ -1,5 +1,10 @@
 ## Changes
 
+1.2.5.1
+* New: Added Mediapartners-Google service user-agent.
+* New: Added option to unblock feed pages on the frontend configuration tab. Useful to block visitors while still allowing access to the RSS-feed.
+* Bugfix: Do no longer log empty URL queries.
+
 1.2.4.2
 * Bugfix: Removed static reference to `wp-includes` folder. WordPress uses the `WPINC` constant to specify this folder, and thus the folder name can be overwritten in the `wp-config.php` file.
 

@@ -97,8 +97,8 @@ function iqblockcountry_logging($ipaddress, $country = 'Unknown', $banned) {
 	 	$country = 'Unknown';
 	 }
 
-	 $urlRequested = (isset($_SERVER['REQUEST_URI']) ? htmlspecialchars($_SERVER['REQUEST_URI']) : '/');
-	 $urlRequested .= (isset($_SERVER['QUERY_STRING']) ? '?' . htmlspecialchars($_SERVER['QUERY_STRING']) : '');
+	 $urlRequested = (isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI']) ? htmlspecialchars($_SERVER['REQUEST_URI']) : '/');
+	 $urlRequested .= (isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']) ? '?' . htmlspecialchars($_SERVER['QUERY_STRING']) : '');
 	 $table_name = $wpdb->prefix . "iqblock_logging";
 	 $result = $wpdb->insert($table_name, array ('datetime' => current_time('mysql'), 'ipaddress' => $ipaddress, 'country' => $country, 'banned' => $banned,'url' => $urlRequested));
 	 if ($result === false) {
@@ -115,8 +115,8 @@ function iqblockcountry_debug_logging($ipaddress, $country = 'Unknown', $banned)
 			$country = 'Unknown';
 		}
 		
-		$urlRequested = (isset($_SERVER["REQUEST_URI"]) ? htmlspecialchars($_SERVER["REQUEST_URI"]) : '/' );
-		$urlRequested .= (isset($_SERVER['QUERY_STRING']) ? '?' . htmlspecialchars($_SERVER['QUERY_STRING']) : '');
+		$urlRequested = (isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI']) ? htmlspecialchars($_SERVER['REQUEST_URI']) : '/');
+		$urlRequested .= (isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']) ? '?' . htmlspecialchars($_SERVER['QUERY_STRING']) : '');
 		$type = htmlspecialchars($_SERVER['REQUEST_METHOD']);
 
 		$table_name = $wpdb->prefix . "iqblock_debug_logging";

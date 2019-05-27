@@ -62,6 +62,7 @@ function iqblockcountry_check($country, $badcountries, $ip_address) {
 	$blocktags = get_option('blockcountry_blocktags');
 	$blockedposttypes = get_option('blockcountry_blockposttypes');
 	$blockedtag = get_option('blockcountry_blocktag');
+	$blockedfeed = get_option('blockcountry_blockfeed');
 	$postid = get_the_ID();
 
 	global $feblacklistip,
@@ -253,19 +254,23 @@ function iqblockcountry_check($country, $badcountries, $ip_address) {
 	}
 
 	if (is_feed()) {
-		$flagged = false;
-		if ((is_array ( $badcountries ) && in_array ( $country, $badcountries ) || (iqblockcountry_validate_ip_in_list($ip_address, $feblacklistiprange4, $feblacklistiprange6, $feblacklistip)))) {
-			$flagged = true;
-		}
-		
-		if (iqblockcountry_validate_ip_in_list($ip_address, $fewhitelistiprange4, $fewhitelistiprange6, $fewhitelistip)) {
-			$flagged = false;
-		}
-		
-		if ($flagged) {
-			$blocked = true;
-		} else {
+		if ($blockedfeed == false) {
 			$blocked = false;
+		} else {
+			$flagged = false;
+			if ((is_array ( $badcountries ) && in_array ( $country, $badcountries ) || (iqblockcountry_validate_ip_in_list($ip_address, $feblacklistiprange4, $feblacklistiprange6, $feblacklistip)))) {
+				$flagged = true;
+			}
+			
+			if (iqblockcountry_validate_ip_in_list($ip_address, $fewhitelistiprange4, $fewhitelistiprange6, $fewhitelistip)) {
+				$flagged = false;
+			}
+			
+			if ($flagged) {
+				$blocked = true;
+			} else {
+				$blocked = false;
+			}
 		}
 	}
 	
