@@ -15,32 +15,52 @@ if (iqblockcountry_is_caching_active()) {
 }
 
 
+/**
+ * Check if an update of the GeoLite IP database is necessarry.
+ * 
+ * @return boolean
+ */
 function iqblockcountry_update_GeoIP2DB() {
+	$updateRequired = false;
+	
 	if (is_file(GEOIP2DBFILE)) {
 		$iqfiledate = filemtime(GEOIP2DBFILE);
 		$iq3months = time() - 3 * 31 * 86400;
 		
-		// GeoLite IP database is too old.
 		if ($iqfiledate < $iq3months) {
+			// GeoLite IP database is too old.
+			$updateRequired = true;
 			if (is_file(GZIPPEDGEOIP2DB)) {
 				unlink(GZIPPEDGEOIP2DB);
 			}
 		}
+	} else {
+		// GeoLite IP database does not exist.
+		$updateRequired = true;
 	}
 	
-	// If gz-archive does not exist, try to download it.
-	if (!is_file(GZIPPEDGEOIP2DB)) {
+	// Update of GeoLite IP database is required.
+	if ($updateRequired) {
+		// If gz-archive exists, delete it to download the latest version.
+		if (is_file(GZIPPEDGEOIP2DB)) {
+			if (!unlink(GZIPPEDGEOIP2DB)) {
+				error_log('Could not delete gzipped GeoLite IP database. Maybe permission error?');
+				return false;
+			}
+		}
+		
 		// If download failed, show error.
 		error_log('Downloading ' . GEOIP2DB);
 		if (DownloadGeoIP2DBfile() !== true) {
+			error_log('Download of gzipped GeoLite IP database failed. Please try to manually update the database.');
 			return false;
 		}
-	}
-	
-	error_log('Found gzipped GeoLite IP database.');
-	// If gz-file exists, try to unpack it.
-	if (UnpackGeoIP2DBfile() !== false) {
-		return true;
+		
+		error_log('Found gzipped GeoLite IP database.');
+		// If gz-file exists, try to unpack it.
+		if (UnpackGeoIP2DBfile() !== false) {
+			return true;
+		}
 	}
 	
 	return false;
