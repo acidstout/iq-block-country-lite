@@ -9,6 +9,12 @@
  * 
  */
 
+function nl2nl($string, $nl = "\n") {
+	$string = str_replace(array("\r\n", "\r", "\n"), $nl, $string);
+	return $string;
+}
+
+
 if (!isset($_REQUEST['ajax']) || empty($_REQUEST['ajax'])) {
 	echo 'This module cannot be accessed directly.';
 	die();
@@ -32,17 +38,15 @@ if (isset($_REQUEST['ip']) && !empty($_REQUEST['ip'])) {
 		curl_close($ch);
 		
 		// Clean output.
+		$html = nl2nl($html);
 		$html = str_replace("\t", '', $html);
-		$html = str_replace("\n", '', $html);
-		$html = str_replace("\r", '', $html);
-		$html = str_replace('  ', '', $html);
 		$html = str_replace(' >', '>', $html);
 		$html = str_replace('> <', '><', $html);
 		$html = substr($html, strpos($html, '<div class="tool-results">'));
-		$html = substr($html, 0, strpos($html, '</div></div><iframe'));
+		$html = substr($html, 0, strpos($html, '<iframe'));
 		
 		// Show result.
-		echo '<!doctype html><html><head><meta charset="utf-8"/></head><body>' . $html . '</body></html>';
+		echo $html;
 	}
 }
 

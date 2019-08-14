@@ -1,4 +1,7 @@
 ## Changes
+1.2.6.1
+* New: Added automatic update of Geo2IP database.
+* Change: Added better support to detect if mbstring is available for usage.
 
 1.2.5.1
 * New: Added Mediapartners-Google service user-agent.

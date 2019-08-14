@@ -4,7 +4,7 @@ define('GZIPPEDGEOIP2DB', PLUGINPATH . DIRECTORY_SEPARATOR . 'db' . DIRECTORY_SE
 
 // Check if the Geo Database exists or if GeoIP API key is entered otherwise display notification.
 if (!is_file(GEOIP2DBFILE)) {
-	if (!checkForGeoIP2DB()) {
+	if (!iqblockcountry_update_GeoIP2DB()) {
 		add_action( 'admin_notices', 'iq_missing_db_notice' );
 	}
 }
@@ -15,8 +15,19 @@ if (iqblockcountry_is_caching_active()) {
 }
 
 
-function checkForGeoIP2DB() {
-	error_log('GeoLite IP database not found.');
+function iqblockcountry_update_GeoIP2DB() {
+	if (is_file(GEOIP2DBFILE)) {
+		$iqfiledate = filemtime(GEOIP2DBFILE);
+		$iq3months = time() - 3 * 31 * 86400;
+		
+		// GeoLite IP database is too old.
+		if ($iqfiledate < $iq3months) {
+			if (is_file(GZIPPEDGEOIP2DB)) {
+				unlink(GZIPPEDGEOIP2DB);
+			}
+		}
+	}
+	
 	// If gz-archive does not exist, try to download it.
 	if (!is_file(GZIPPEDGEOIP2DB)) {
 		// If download failed, show error.
@@ -174,9 +185,9 @@ function iq_cachingisactive_notice() {
 function iq_old_db_notice() {
 	?><div class="notice notice-warning">
 		<h3>iQ Block Country</h3>
-		<p><?php _e('The MaxMind GeoIP database is older than 3 months.', 'iq-block-country');?></p>
+		<p><?php _e('The MaxMind GeoIP database was older than 3 months and has been updated.', 'iq-block-country');?></p>
 		<p><?php
-			_e("Please download the database from: " , 'iq-block-country');
+			_e("Please check if everything works fine. In case of error, try to download the database from: " , 'iq-block-country');
 			echo "<a href=\"" . GEOIP2DB . "\" target=\"_blank\">" . GEOIP2DB . "</a> ";
 			_e("unzip the file and afterwards upload it to the following location: " , 'iq-block-country');
 			?><b><?php echo GEOIP2DBFILE; ?></b>
@@ -457,22 +468,20 @@ function iqblockcountry_settings_tools() {
 	<h3><?php _e('Database information', 'iq-block-country'); ?></h3><?php
 		
 	$format = get_option('date_format') . ' ' . get_option('time_format');
-	if (!get_option('blockcountry_geoapikey')) {
-		/* Check if the Geo Database exists */
-		if (is_file ( GEOIP2DBFILE )) {
-			_e("GeoIP2 database exists. File date: ", 'iq-block-country');
-			$iqfiledate = filemtime(GEOIP2DBFILE);
-			echo date ($format,$iqfiledate);
-			echo " ";
-			$iq3months = time() - 3 * 31 * 86400;
-			
-			if ($iqfiledate < $iq3months) { 
-				_e("Database is older than 3 months... Please update...", 'iq-block-country');
-			}
-		} else {
-			_e("GeoIP2 database does not exist.", 'iq-block-country');
+	/* Check if the Geo Database exists */
+	if (is_file ( GEOIP2DBFILE )) {
+		_e("GeoIP2 database exists. File date: ", 'iq-block-country');
+		$iqfiledate = filemtime(GEOIP2DBFILE);
+		echo date($format, $iqfiledate) . " ";
+		$iq3months = time() - 3 * 31 * 86400;
+		
+		if ($iqfiledate < $iq3months) { 
+			_e("Database is older than 3 months... Please update...", 'iq-block-country');
 		}
+	} else {
+		_e("GeoIP2 database does not exist.", 'iq-block-country');
 	}
+
 }
 
 
@@ -1057,6 +1066,7 @@ function iqblockcountry_settings_home() {
 		$iq3months = time() - 3 * 31 * 86400;
 		
 		if ($iqfiledate < $iq3months) {
+			iqblockcountry_update_GeoIP2DB();
 			iq_old_db_notice();
 		}
 	}
@@ -1269,11 +1279,27 @@ function iqblockcountry_settings_logging() {
 			$datetime = strtotime($row->datetime);
 			$mysqldate = date($format, $datetime);
 			
+			/*
 			if ($lookupstats) {
 				echo $mysqldate . '</td><td class="whoisip" data-ip="' . $row->ipaddress . '">' . $row->ipaddress . '</td><td>' . $row->ipaddress . 'S</td><td><a href="http' . ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $row->url . '" target="_blank">' . $row->url . '</a></td><td>' . $countryurl . $countrylist[$row->country] . '<td>';
 			} else {
 				echo $mysqldate . '</td><td class="whoisip" data-ip="' . $row->ipaddress . '">' . $row->ipaddress . '</td><td>' . gethostbyaddr( $row->ipaddress ) . '</td><td><a href="http' . ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $row->url . '" target="_blank">' . $row->url . '</a></td><td>' . $countryurl . $countrylist[$row->country] . '<td>';
 			}
+			*/
+			if ($lookupstats) {
+				if (extension_loaded('mbstring')) {
+					echo $mysqldate . '</td><td class="whoisip" data-ip="' . $row->ipaddress . '" title="Click to lookup this IP">' . $row->ipaddress . '</td><td>' . $row->ipaddress . 'S</td><td><a href="http' . ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $row->url . '" target="_blank">' . mb_strimwidth($row->url, 0, 75, '...') . '</a></td><td>' . $countryurl . $countrylist[$row->country] . '<td>';
+				} else {
+					echo $mysqldate . '</td><td class="whoisip" data-ip="' . $row->ipaddress . '" title="Click to lookup this IP">' . $row->ipaddress . '</td><td>' . $row->ipaddress . 'S</td><td><a href="http' . ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $row->url . '" target="_blank">' . $row->url . '</a></td><td>' . $countryurl . $countrylist[$row->country] . '<td>';
+				}
+			} else {
+				if (extension_loaded('mbstring')) {
+					echo $mysqldate . '</td><td class="whoisip" data-ip="' . $row->ipaddress . '" title="Click to lookup this IP">' . $row->ipaddress . '</td><td>' . gethostbyaddr( $row->ipaddress ) . '</td><td><a href="http' . ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $row->url . '" target="_blank">' .  mb_strimwidth($row->url, 0, 75, '...') . '</a></td><td>' . $countryurl . $countrylist[$row->country] . '<td>';
+				} else {
+					echo $mysqldate . '</td><td class="whoisip" data-ip="' . $row->ipaddress . '" title="Click to lookup this IP">' . $row->ipaddress . '</td><td>' . gethostbyaddr( $row->ipaddress ) . '</td><td><a href="http' . ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $row->url . '" target="_blank">' . $row->url . '</a></td><td>' . $countryurl . $countrylist[$row->country] . '<td>';
+				}
+			}
+			
 			
 			if ($row->banned == 'F') {
 				_e('Frontend', 'iq-block-country');
