@@ -205,3 +205,83 @@
 1.1.17
 * Change: Due to a conflict of the license where Wordpress is released under and the license the MaxMind databases are released under I was forced to remove all auto downloads of the GeoIP databases. You now have to manually download the databases and upload them yourself.
 * New: Added Webence GeoIP API lookup. See https://geoip.webence.nl/ for more information about this API.
+
+1.1.16
+* New: Accessibility option. You can now choose if you want the country default selectbox or an normal selectbox.
+* New: New button to empty the logging database..
+* New: You can now set the option to not log the ip addresses to the database. This does not influence the blocking process only the logging process. This can be handy if the laws in your country do not permit you to log this information or if you choose not to log this information
+
+1.1.15
+* Bugfix: You can now set an option to buffer the output of the iQ Block Country plugin. If you use for instance NextGen Gallery you should not set this option as it will break uploading pictures to your gallery.
+* Bugfix: Last time GeoIP databases were downloaded was wrong.
+* Bugfix: If you configured auto-update of the GeoIP databases the tools tab showed that you did not configure auto update.
+* Added check for HTTP_X_TM_REMOTE_ADDR to get real ip address of T-Mobile users.
+* Added Twitter, Bitly, Cliqz and TinEye to the search engines list.
+* New: No longer blocks category pages of categories you have not blocked.
+* Bugfix: Added check if HTTP_USER_AGENT is set.
+
+1.1.14
+* Bugfix: The plugin did not recognise the login page when installed to a subdirectory.
+* New: You can configure if it auto updates the GeoIP Database. Upon request of those people who have the paid database of MaxMind.
+* Added Facebook and MSN to list of search engines.
+* Changed the version of the geoip.inc file to the version of https://github.com/daigo75/geoip-api-php
+
+1.1.13
+* Bugfix on setting defaults when they values already existed.
+* You can now allow search engines access to your country even if they come from countries that you want to block.
+
+1.1.12
+* Bugfix on the backend blacklist / whitelist
+
+1.1.11
+* Added select box on how many rows to display on the logging tab
+* Redirect blocked users to a specific page instead of displaying the block message.
+* Added blacklist and whitelist of IP addresses to the backend.
+* Adjusted some text
+* Minor bugfixes
+
+1.1.10
+* Small fixes
+* WP 3.9 compatability issue fixed
+
+1.1.9
+* Bugfix release due to faulty v1.1.8 release. My Apologies.
+
+1.1.8
+* Smashed a bug where the homepage was unprotected due to missing check.
+
+1.1.7
+* Added Russian (ru_RU) translation by Maxim
+* Added Serbo-Croatian (sr_RU) translation by Borisa Djuraskovic (Webostinghub)
+* Changed the logging table a bit.
+
+1.1.6
+* Added to ban categories. This works the same way as blocking pages (By request of FVCS)
+* Changed the admin page layout. Added tabs for frontend and backend blocking to make it look less cluttered
+* Added optional tracking to the plugin. This is an experiment to see if building a database of IP addresses that try to login to the backend is viable.
+* Upon first activation the plugin now fills the backend block list with all countries except the country that is currently used to activate.
+* Added IP checking in header HTTP_CLIENT_IP and HTTP_X_REAL_IP
+
+1.1.5
+* Statistics required wp-config.php in a specific place bug smashed.
+
+1.1.4
+* Added import/export function.
+* Minor bugs solved
+
+1.1.3
+* Fixed error that when using the option to block individual pages all visitors would be blocked. (Thanks to apostlepoe for reporting)
+
+1.1.2
+* Fixed localization error. (Thanks to Lisa for reporting)
+
+1.1.1
+* You can now choose to block individual pages. Leaving other pages open for visitors from blocked countries. You can for instance use this feature to block countries from visiting specific pages due to content rights etc.
+* Source now supports localization. Included is the English and Dutch language. I’d be happy to include other translations if anyone can supply those to me.
+
+1.1
+* Added statistics to the plugin.
+* You can view the last 15 hosts that were blocked including the url they visited.
+* You can view the top 15 of countries that were blocked in the past 30 days.
+* You can view the top 15 of hosts that were blocked in the past 30 days.
+* You can view the top URL’s that were most blocked in the past 30 days.

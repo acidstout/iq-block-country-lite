@@ -50,13 +50,15 @@ Plugins that do NOT work: W3 Total Cache, Hyper cache, WPRocket
 4. Go to the settings page and choose which countries you want to ban. Use the ctrl key to select multiple countries.
 
 ## How can I get a new version of the GeoIP database?
-You can download the database directly from MaxMind and upload them to your website.
+Maxmind updates the GeoLite database every month. The plugin checks automatically every three months for database updates, which should be sufficient. You also may download the database directly from MaxMind and upload them to your website.
 
 1. Download the GeoIP2 Country database from [MaxMind](http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz)
 2. Unzip the GeoIP2 database and put the GeoLite2-Country.mmdb file into the plugin's db folder, usually /wp-content/iq-block-country/db/GeoLite2-Country.mmdb
 
 Or
 
-1. Delete the GeoLite2-Country.mmdb file from the plugin's database folder and reload your website. The plugin will fetch and install the latest version automatically.
+* Delete the GeoLite2-Country.mmdb file from the plugin's database folder and reload your website. The plugin will fetch and install the latest version automatically.
 
-Maxmind updates the GeoLite database every month. It's planned to also add a button to manually trigger the download and/or have WordPress check automatically once per month for database updates.
+Or
+
+* Go to the Tools tab in the plugin's settings and click the Update button to manually trigger an update of the database.
