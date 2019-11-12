@@ -1,6 +1,9 @@
 ## Changes
+1.2.6.2
+* New: Added option to manually update the GeoIP2 database.
+
 1.2.6.1
-* New: Added automatic update of Geo2IP database.
+* New: Added automatic update of GeoIP2 database.
 * Change: Added better support to detect if mbstring is available for usage.
 
 1.2.5.1
@@ -19,7 +22,7 @@
 * Change: Code has been cleaned up and formatted properly.
 * Change: Removed Webence API. If you use the Webence API this is the wrong plugin for you. In such case please stick to the non-lite version.
 * Change: Removed tracking features.
-* New: Added automatic downloading of the GeoLit2 database if it doesn't exist. In version 1.1.19 Pascal decided to remove that feature. Now it's back in.
+* New: Added automatic downloading of the GeoLit2 database if it doesn't exist. In version 1.1.17 Pascal decided to remove that feature. Now it's back in.
 
 1.2.3
 * Change: Changed inverse option to that you have to select between 'Block countries selected below' or 'Block all countries except those selected below' as inverse option caused some confusion.

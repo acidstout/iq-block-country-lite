@@ -20,14 +20,13 @@ if (iqblockcountry_is_caching_active()) {
  * 
  * @return boolean
  */
-function iqblockcountry_update_GeoIP2DB() {
-	$updateRequired = false;
+function iqblockcountry_update_GeoIP2DB($updateRequired = false) {
 	
 	if (is_file(GEOIP2DBFILE)) {
 		$iqfiledate = filemtime(GEOIP2DBFILE);
 		$iq3months = time() - 3 * 31 * 86400;
 		
-		if ($iqfiledate < $iq3months) {
+		if ($iqfiledate < $iq3months || $updateRequired !== false) {
 			// GeoLite IP database is too old.
 			$updateRequired = true;
 			if (is_file(GZIPPEDGEOIP2DB)) {
@@ -370,114 +369,127 @@ function iqblockcountry_uninstall() {
 
 
 function iqblockcountry_settings_tools() {
+	global $feblacklistip,
+		$feblacklistiprange4,
+		$feblacklistiprange6,
+		$fewhitelistip,
+		$fewhitelistiprange4,
+		$fewhitelistiprange6,
+		$beblacklistip,
+		$beblacklistiprange4,
+		$beblacklistiprange6,
+		$bewhitelistip,
+		$bewhitelistiprange4,
+		$bewhitelistiprange6;
+	
+	// IP check
+	if ( isset($_POST['action']) && $_POST[ 'action' ] == 'ipcheck') {
+		if (!isset($_POST['ipcheck_nonce'])) {
+			die("Failed security check.");
+		}
+		
+		if (!wp_verify_nonce($_POST['ipcheck_nonce'],'ipcheck_nonce')) {
+			die("Is this a CSRF attempts?");
+		}
+	}
+
+	// Update GeoIP2 database
+	if ( isset($_POST['action']) && $_POST[ 'action' ] == 'updategeoip2db') {
+		if (!isset($_POST['updategeoip2db_nonce'])) {
+			die("Failed security check.");
+		}
+		
+		if (!wp_verify_nonce($_POST['updategeoip2db_nonce'], 'updategeoip2db_nonce')) {
+			die("Is this a CSRF attempts?");
+		}
+		iqblockcountry_update_GeoIP2DB(true);
+	}
+	
 	?><h3><?php _e('Check which country belongs to an IP Address according to the current database.', 'iq-block-country'); ?></h3>
 	<form name="ipcheck" action="#ipcheck" method="post">
 		<input type="hidden" name="action" value="ipcheck" />
 		<input name="ipcheck_nonce" type="hidden" value="<?php echo wp_create_nonce('ipcheck_nonce'); ?>" />
 		<?php _e('IP Address to check:', 'iq-block-country'); ?> <input type="text" name="ipaddress" lenth="50" /><?php 
 		
-		global $feblacklistip,
-			$feblacklistiprange4,
-			$feblacklistiprange6,
-			$fewhitelistip,
-			$fewhitelistiprange4,
-			$fewhitelistiprange6,
-			$beblacklistip,
-			$beblacklistiprange4,
-			$beblacklistiprange6,
-			$bewhitelistip,
-			$bewhitelistiprange4,
-			$bewhitelistiprange6;
-
-		if ( isset($_POST['action']) && $_POST[ 'action' ] == 'ipcheck') {
-			if (!isset($_POST['ipcheck_nonce'])) {
-				die("Failed security check.");
-			}
+		if (isset($_POST['ipaddress']) && !empty($_POST['ipaddress'])) {
+			$ip_address = $_POST['ipaddress'];
 			
-			if (!wp_verify_nonce($_POST['ipcheck_nonce'],'ipcheck_nonce')) {
-				die("Is this a CSRF attempts?");
-			}
-			
-			if (isset($_POST['ipaddress']) && !empty($_POST['ipaddress'])) {
-				$ip_address = $_POST['ipaddress'];
+			if (iqblockcountry_is_valid_ipv4($ip_address) || iqblockcountry_is_valid_ipv6($ip_address)) {
+				$country = iqblockcountry_check_ipaddress($ip_address);
+				$countrylist = iqblockcountry_get_isocountries();
 				
-				if (iqblockcountry_is_valid_ipv4($ip_address) || iqblockcountry_is_valid_ipv6($ip_address)) {
-					$country = iqblockcountry_check_ipaddress($ip_address);
-					$countrylist = iqblockcountry_get_isocountries();
+				if ($country == "Unknown" || $country == "ipv6" || $country == "" || $country == "FALSE") {
+					echo "<p>" . __('No country for', 'iq-block-country') . ' ' . $ip_address . ' ' . __('could be found. Or', 'iq-block-country') . ' ' . $ip_address . ' ' . __('is not a valid IPv4 or IPv6 IP address', 'iq-block-country'); 
+					echo "</p>";
+				} else {
+					$displaycountry = $countrylist[$country];
+					echo "<p>" . __('IP Adress', 'iq-block-country') . ' ' . $ip_address . ' ' . __('belongs to', 'iq-block-country') . ' ' . $displaycountry . ".</p>";
+					$haystack = get_option('blockcountry_banlist');
 					
-					if ($country == "Unknown" || $country == "ipv6" || $country == "" || $country == "FALSE") {
-						echo "<p>" . __('No country for', 'iq-block-country') . ' ' . $ip_address . ' ' . __('could be found. Or', 'iq-block-country') . ' ' . $ip_address . ' ' . __('is not a valid IPv4 or IPv6 IP address', 'iq-block-country'); 
-						echo "</p>";
-					} else {
-						$displaycountry = $countrylist[$country];
-						echo "<p>" . __('IP Adress', 'iq-block-country') . ' ' . $ip_address . ' ' . __('belongs to', 'iq-block-country') . ' ' . $displaycountry . ".</p>";
-						$haystack = get_option('blockcountry_banlist');
-						
-						if (!is_array($haystack)) {
-							$haystack = array();
+					if (!is_array($haystack)) {
+						$haystack = array();
+					}
+					
+					$inverse = get_option( 'blockcountry_banlist_inverse');
+					
+					if ($inverse) {
+						if (is_array($haystack) && !in_array ($country, $haystack )) {
+							_e('This country is not permitted to visit the frontend of this website.', 'iq-block-country');
+							echo "<br />";
 						}
-						
-						$inverse = get_option( 'blockcountry_banlist_inverse');
-						
-						if ($inverse) {
-							if (is_array($haystack) && !in_array ($country, $haystack )) {
-								_e('This country is not permitted to visit the frontend of this website.', 'iq-block-country');
-								echo "<br />";
-							}
-						} else {						   
-							if (is_array($haystack) && in_array ( $country, $haystack )) {
-								_e('This country is not permitted to visit the frontend of this website.', 'iq-block-country');
-								echo "<br />";
-							}
-						}
-						
-						$inverse = get_option( 'blockcountry_backendbanlist_inverse');
-						$haystack = get_option('blockcountry_backendbanlist');
-						
-						if (!is_array($haystack)) {
-							$haystack = array();
-						}
-						
-						if ($inverse) {
-							if (is_array($haystack) && !in_array ( $country, $haystack )) {
-								_e('This country is not permitted to visit the backend of this website.', 'iq-block-country');
-								echo "<br />";
-							}
-						} else {	
-							if (is_array($haystack) && in_array ( $country, $haystack )) {
-								_e('This country is not permitted to visit the backend of this website.', 'iq-block-country');
-								echo "<br />";
-							}
-						}
-						
-						$backendbanlistip = unserialize(get_option('blockcountry_backendbanlistip'));
-						
-						if (is_array($backendbanlistip) &&  in_array($ip_address,$backendbanlistip)) {
-							_e('This IP address is present in the blacklist.', 'iq-block-country');
+					} else {						   
+						if (is_array($haystack) && in_array ( $country, $haystack )) {
+							_e('This country is not permitted to visit the frontend of this website.', 'iq-block-country');
+							echo "<br />";
 						}
 					}
 					
-					if (iqblockcountry_validate_ip_in_list($ip_address,$feblacklistiprange4,$feblacklistiprange6,$feblacklistip)) {
-						_e('This IP address is present in the frontend blacklist.', 'iq-block-country');
-						echo "<br />";
+					$inverse = get_option( 'blockcountry_backendbanlist_inverse');
+					$haystack = get_option('blockcountry_backendbanlist');
+					
+					if (!is_array($haystack)) {
+						$haystack = array();
 					}
 					
-					if (iqblockcountry_validate_ip_in_list($ip_address,$fewhitelistiprange4,$fewhitelistiprange6,$fewhitelistip)) {
-						_e('This IP address is present in the frontend whitelist.', 'iq-block-country');
-						echo "<br />";
+					if ($inverse) {
+						if (is_array($haystack) && !in_array ( $country, $haystack )) {
+							_e('This country is not permitted to visit the backend of this website.', 'iq-block-country');
+							echo "<br />";
+						}
+					} else {	
+						if (is_array($haystack) && in_array ( $country, $haystack )) {
+							_e('This country is not permitted to visit the backend of this website.', 'iq-block-country');
+							echo "<br />";
+						}
 					}
 					
-					if (iqblockcountry_validate_ip_in_list($ip_address,$beblacklistiprange4,$beblacklistiprange6,$beblacklistip)) {
-						_e('This IP address is present in the backend blacklist.', 'iq-block-country');
-						echo "<br />";
-					}
+					$backendbanlistip = unserialize(get_option('blockcountry_backendbanlistip'));
 					
-					if (iqblockcountry_validate_ip_in_list($ip_address,$bewhitelistiprange4,$bewhitelistiprange6,$beblacklistip)) {
-						_e('This IP address is present in the backend whitelist.', 'iq-block-country');
-						echo "<br />";
+					if (is_array($backendbanlistip) &&  in_array($ip_address,$backendbanlistip)) {
+						_e('This IP address is present in the blacklist.', 'iq-block-country');
 					}
 				}
-			}	
+				
+				if (iqblockcountry_validate_ip_in_list($ip_address,$feblacklistiprange4,$feblacklistiprange6,$feblacklistip)) {
+					_e('This IP address is present in the frontend blacklist.', 'iq-block-country');
+					echo "<br />";
+				}
+				
+				if (iqblockcountry_validate_ip_in_list($ip_address,$fewhitelistiprange4,$fewhitelistiprange6,$fewhitelistip)) {
+					_e('This IP address is present in the frontend whitelist.', 'iq-block-country');
+					echo "<br />";
+				}
+				
+				if (iqblockcountry_validate_ip_in_list($ip_address,$beblacklistiprange4,$beblacklistiprange6,$beblacklistip)) {
+					_e('This IP address is present in the backend blacklist.', 'iq-block-country');
+					echo "<br />";
+				}
+				
+				if (iqblockcountry_validate_ip_in_list($ip_address,$bewhitelistiprange4,$bewhitelistiprange6,$beblacklistip)) {
+					_e('This IP address is present in the backend whitelist.', 'iq-block-country');
+					echo "<br />";
+				}
+			}
 		}
 		
 		echo '<div class="submit"><input type="submit" class="button" name="test" value="' . __( 'Check IP address', 'iq-block-country' ) . '" /></div>';
@@ -501,7 +513,14 @@ function iqblockcountry_settings_tools() {
 	} else {
 		_e("GeoIP2 database does not exist.", 'iq-block-country');
 	}
-
+	?><br/>
+	<br/>
+	<form name="updategeoip2db" action="#updategeoip2db" method="post">
+		<input type="hidden" name="action" value="updategeoip2db" />
+		<input name="updategeoip2db_nonce" type="hidden" value="<?php echo wp_create_nonce('updategeoip2db_nonce'); ?>" />
+		<input type="submit" class="button" name="update" value="<?php echo __('Update', 'iq-block-country')?>"/>
+		<?php wp_nonce_field('iqblockcountry');?>
+	</form><?php
 }
 
 
