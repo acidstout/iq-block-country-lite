@@ -1,4 +1,8 @@
 <?php
+// Exit if accessed directly.
+if (!defined('ABSPATH')) {
+	exit;
+}
 
 function iqblockcountry_install_db() {
 	global $wpdb;

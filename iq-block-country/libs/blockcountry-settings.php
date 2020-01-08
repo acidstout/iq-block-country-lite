@@ -1,8 +1,19 @@
 <?php
+// Exit if accessed directly.
+if (!defined('ABSPATH')) {
+	exit;
+}
 
 define('GZIPPEDGEOIP2DB', PLUGINPATH . DIRECTORY_SEPARATOR . 'db' . DIRECTORY_SEPARATOR. basename(GEOIP2DB));
 
-// Check if the Geo Database exists or if GeoIP API key is entered otherwise display notification.
+// Check if MaxMind license key has been set, if not so display notification.
+global $maxmind_license_key;
+if (empty($maxmind_license_key) || $maxmind_license_key === false) {
+	add_action( 'admin_notices', 'iq_missing_maxmind_license_key_notice' );
+}
+
+
+// Check if the Geo Database exists, if not so display notification.
 if (!is_file(GEOIP2DBFILE)) {
 	if (!iqblockcountry_update_GeoIP2DB()) {
 		add_action( 'admin_notices', 'iq_missing_db_notice' );
@@ -21,6 +32,12 @@ if (iqblockcountry_is_caching_active()) {
  * @return boolean
  */
 function iqblockcountry_update_GeoIP2DB($updateRequired = false) {
+	global $maxmind_license_key;
+	
+	// Exit if there's no license key.
+	if (empty($maxmind_license_key)) {
+		return false;
+	}
 	
 	if (is_file(GEOIP2DBFILE)) {
 		$iqfiledate = filemtime(GEOIP2DBFILE);
@@ -50,9 +67,10 @@ function iqblockcountry_update_GeoIP2DB($updateRequired = false) {
 		
 		// If download failed, show error.
 		error_log('Downloading ' . GEOIP2DB);
-		if (DownloadGeoIP2DBfile() !== true) {
-			error_log('Download of gzipped GeoLite IP database failed. Please try to manually update the database.');
-			return false;
+		$resp = DownloadGeoIP2DBfile();
+		if ($resp != 200) {
+			error_log('Download of gzipped GeoLite IP database failed with error-code ' . $resp . '. Please try to manually update the database.');
+			return $resp;
 		}
 		
 		error_log('Found gzipped GeoLite IP database.');
@@ -90,13 +108,19 @@ function DownloadGeoIP2DBfile() {
 		// Download file and write it to destination file.
 		curl_setopt($ch, CURLOPT_FILE, $fp);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
-		curl_exec($ch);
+		if (curl_exec($ch) !== false) {
+			$curl_response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+			error_log('HTTP response code: ' . $curl_response_code);
+		} else {
+			// Custom code to define server is unavailable.
+			$curl_response_code = -1;
+		}
 		curl_close($ch);
 		
 		// Close destination file.
 		fclose($fp);
 		
-		return true;
+		return $curl_response_code;
 	}
 	
 	return false;
@@ -166,12 +190,23 @@ function UnpackGeoIP2DBfile() {
 
 
 /*
+ * Display missing MaxMind license key notification.
+ */
+function iq_missing_maxmind_license_key_notice() {
+	?><div class="notice notice-error">
+		<h3><?php echo PLUGINNAME;?></h3>
+		<p><?php _e('Missing MaxMind GeoIP2 license key. Please set a valid license key in the <a href="' . site_url() . '/wp-admin/options-general.php?page=iq-block-country/libs/blockcountry-settings.php&tab=tools">plugin settings</a> in order to download the latest GeoIP2 database.', 'iq-block-country');?></p>
+		<p><?php _e('For more detailed instructions take a look at the documentation.', 'iq-block-country');?></p>
+	</div><?php
+}
+
+/*
  * Display missing database notification.
  */
 function iq_missing_db_notice() {
 	if (!is_file(GEOIP2DBFILE)) {
 		?><div class="notice notice-error">
-			<h3>iQ Block Country</h3>
+			<h3><?php echo PLUGINNAME;?></h3>
 			<p><?php _e('The MaxMind GeoIP2 database does not exist.', 'iq-block-country');?></p>
 			<p><?php
 				_e('We try to download it automatically and reload this page afterwards to have changes in effect, but in case it fails, please download the database from: ' , 'iq-block-country');
@@ -185,14 +220,28 @@ function iq_missing_db_notice() {
 }
 
 
+function iq_failed_db_download() {
+	?><div class="notice notice-error">
+		<h3><?php echo PLUGINNAME;?></h3>
+		<p><?php _e('The MaxMind GeoIP2 database does not exist.', 'iq-block-country');?></p>
+		<p><?php
+			_e('We tried to download it automatically, but it failed. Please download the database from: ' , 'iq-block-country');
+			echo '<a href="' . GEOIP2DB . '" target="_blank">' . GEOIP2DB . '</a> ';
+			_e('unzip the file and afterwards upload the GeoLite2-Country.mmdb file to the following location: ' , 'iq-block-country');
+			?><b><?php echo GEOIP2DBFILE;?></b>
+		</p>
+		<p><?php _e('For more detailed instructions take a look at the documentation.', 'iq-block-country');?></p>
+	</div><?php
+}
+
 /*
  * Display missing database notification.
  */
 function iq_cachingisactive_notice() {
 	?><div class="notice notice-warning is-dismissible">
-		<h3>iQ Block Country</h3>
+		<h3><?php echo PLUGINNAME;?></h3>
 		<p><?php _e('A caching plugin appears to be active on your WordPress installation.', 'iq-block-country'); ?></p>
-		<p><?php _e('Caching plugins do not always cooperate nicely together with the iQ Block Country plugin which may lead to non blocked visitors getting a cached banned message or page.', 'iq-block-country'); ?></p>
+		<p><?php _e('Caching plugins do not always cooperate nicely together with the <?php echo PLUGINNAME;?> plugin which may lead to non blocked visitors getting a cached banned message or page.', 'iq-block-country'); ?></p>
 		<p><?php _e('For more information visit the following page:','iq-block-country'); ?> <a target="_blank"href="https://www.webence.nl/questions/iq-block-country-and-caching-plugins/">https://www.webence.nl/questions/iq-block-country-and-caching-plugins/</a></p>
 	</div><?php
 }
@@ -203,7 +252,7 @@ function iq_cachingisactive_notice() {
  */
 function iq_old_db_notice() {
 	?><div class="notice notice-warning">
-		<h3>iQ Block Country</h3>
+		<h3><?php echo PLUGINNAME;?></h3>
 		<p><?php _e('The MaxMind GeoIP database was older than 3 months and has been updated.', 'iq-block-country');?></p>
 		<p><?php
 			_e("Please check if everything works fine. In case of error, try to download the database from: " , 'iq-block-country');
@@ -217,11 +266,11 @@ function iq_old_db_notice() {
 
 
 /*
- * Create the wp-admin menu for iQ Block Country
+ * Create the wp-admin menu
  */
 function iqblockcountry_create_menu() {
 	//create new menu option in the settings department
-	add_submenu_page ( 'options-general.php', 'iQ Block Country Lite', 'iQ Block Country Lite', 'administrator', __FILE__, 'iqblockcountry_settings_page' );
+	add_submenu_page ( 'options-general.php', PLUGINNAME, PLUGINNAME, 'administrator', __FILE__, 'iqblockcountry_settings_page' );
 	//call register settings function
 	add_action ( 'admin_init', 'iqblockcountry_register_mysettings' );
 }
@@ -267,6 +316,7 @@ function iqblockcountry_register_mysettings() {
 	register_setting ( 'iqblockcountry-settings-group-cat', 'blockcountry_blockhome');
 	register_setting ( 'iqblockcountry-settings-group-tags', 'blockcountry_blocktags');
 	register_setting ( 'iqblockcountry-settings-group-tags', 'blockcountry_tags');
+	register_setting ( 'iqblockcountry-settings-group-tools', 'blockcountry_maxmind_license_key' );
 	register_setting ( 'iqblockcountry-settings-group-se', 'blockcountry_allowse');
 }
 
@@ -282,7 +332,7 @@ function iqblockcountry_get_options_arr() {
 		'blockcountry_blockmessage','blockcountry_blocklogin','blockcountry_blockfrontend','blockcountry_blockbackend','blockcountry_header',
 		'blockcountry_blockpages','blockcountry_pages','blockcountry_blockcategories','blockcountry_categories',
 		'blockcountry_blockhome','blockcountry_nrstatistics','blockcountry_daysstatistics','blockcountry_lookupstatistics',
-		'blockcountry_redirect','blockcountry_redirect_url','blockcountry_allowse',
+		'blockcountry_redirect','blockcountry_redirect_url','blockcountry_allowse', 'blockcountry_maxmind_license_key',
 		'blockcountry_debuglogging','blockcountry_buffer','blockcountry_accessibility','blockcountry_ipoverride','blockcountry_logging','blockcountry_blockposttypes',
 		'blockcountry_posttypes','blockcountry_blocksearch','blockcountry_adminajax','blockcountry_blocktag','blockcountry_blockfeed','blockcountry_blocktags','blockcountry_tags'
 	);
@@ -294,7 +344,7 @@ function iqblockcountry_get_options_arr() {
  * Set default values when activating this plugin.
  */
 function iqblockcountry_set_defaults() {
-	update_option('blockcountry_version',VERSION);
+	update_option('blockcountry_version', VERSION);
 	$ip_address = iqblockcountry_get_ipaddress();
 	$server_addr = array_key_exists( 'SERVER_ADDR', $_SERVER ) ? $_SERVER['SERVER_ADDR'] : $_SERVER['LOCAL_ADDR'];
 
@@ -365,6 +415,7 @@ function iqblockcountry_uninstall() {
 	delete_option('blockcountry_blocktags');
 	delete_option('blockcountry_blockfeed');
 	delete_option('blockcountry_tags');
+	delete_option('blockcountry_maxmind_license_key');
 }
 
 
@@ -382,27 +433,121 @@ function iqblockcountry_settings_tools() {
 		$bewhitelistiprange4,
 		$bewhitelistiprange6;
 	
-	// IP check
-	if ( isset($_POST['action']) && $_POST[ 'action' ] == 'ipcheck') {
-		if (!isset($_POST['ipcheck_nonce'])) {
-			die("Failed security check.");
+	global $maxmind_license_key;
+	
+	$ipcheck_result = '';
+		
+	if (isset($_POST['action'])) {
+		$iqaction = sanitize_text_field($_POST['action']);
+		if (!isset($_POST[$iqaction . '_nonce'])) {
+			die('Failed security check.');
 		}
 		
-		if (!wp_verify_nonce($_POST['ipcheck_nonce'],'ipcheck_nonce')) {
-			die("Is this a CSRF attempts?");
-		}
-	}
-
-	// Update GeoIP2 database
-	if ( isset($_POST['action']) && $_POST[ 'action' ] == 'updategeoip2db') {
-		if (!isset($_POST['updategeoip2db_nonce'])) {
-			die("Failed security check.");
+		if (!wp_verify_nonce($_POST[$iqaction . '_nonce'], $iqaction . '_nonce')) {
+			die('Is this a CSRF attempts?');
 		}
 		
-		if (!wp_verify_nonce($_POST['updategeoip2db_nonce'], 'updategeoip2db_nonce')) {
-			die("Is this a CSRF attempts?");
+		switch ($iqaction) {
+			// IP check
+			case 'ipcheck':
+				if (isset($_POST['ipaddress']) && !empty($_POST['ipaddress'])) {
+					$ip_address = sanitize_text_field($_POST['ipaddress']);
+					
+					if (iqblockcountry_is_valid_ipv4($ip_address) || iqblockcountry_is_valid_ipv6($ip_address)) {
+						$country = iqblockcountry_check_ipaddress($ip_address);
+						$countrylist = iqblockcountry_get_isocountries();
+						
+						if ($country == "Unknown" || $country == "ipv6" || $country == "" || $country == "FALSE") {
+							$ipcheck_result = '<p>' . __('No country for', 'iq-block-country') . ' ' . $ip_address . ' ' . __('could be found. Or', 'iq-block-country') . ' ' . $ip_address . ' ' . __('is not a valid IPv4 or IPv6 IP address', 'iq-block-country') . '</p>';
+						} else {
+							$displaycountry = $countrylist[$country];
+							$ipcheck_result = '<p>' . __('IP Adress', 'iq-block-country') . ' ' . $ip_address . ' ' . __('belongs to', 'iq-block-country') . ' ' . $displaycountry . '.</p>';
+							$haystack = get_option('blockcountry_banlist');
+							
+							if (!is_array($haystack)) {
+								$haystack = array();
+							}
+							
+							$inverse = get_option( 'blockcountry_banlist_inverse');
+							
+							if ($inverse) {
+								if (is_array($haystack) && !in_array ($country, $haystack )) {
+									$ipcheck_result .= __('This country is not permitted to visit the frontend of this website.', 'iq-block-country');
+									$ipcheck_result .= '<br/>';
+								}
+							} else {
+								if (is_array($haystack) && in_array ( $country, $haystack )) {
+									$ipcheck_result .= __('This country is not permitted to visit the frontend of this website.', 'iq-block-country');
+									$ipcheck_result .= '<br/>';
+								}
+							}
+							
+							$inverse = get_option( 'blockcountry_backendbanlist_inverse');
+							$haystack = get_option('blockcountry_backendbanlist');
+							
+							if (!is_array($haystack)) {
+								$haystack = array();
+							}
+							
+							if ($inverse) {
+								if (is_array($haystack) && !in_array ( $country, $haystack )) {
+									$ipcheck_result .= __('This country is not permitted to visit the backend of this website.', 'iq-block-country');
+									$ipcheck_result .= '<br/>';
+								}
+							} else {
+								if (is_array($haystack) && in_array ( $country, $haystack )) {
+									$ipcheck_result .= __('This country is not permitted to visit the backend of this website.', 'iq-block-country');
+									$ipcheck_result .= '<br/>';
+								}
+							}
+							
+							$backendbanlistip = unserialize(get_option('blockcountry_backendbanlistip'));
+							
+							if (is_array($backendbanlistip) &&  in_array($ip_address,$backendbanlistip)) {
+								$ipcheck_result .= __('This IP address is present in the blacklist.', 'iq-block-country');
+							}
+						}
+						
+						if (iqblockcountry_validate_ip_in_list($ip_address,$feblacklistiprange4,$feblacklistiprange6,$feblacklistip)) {
+							$ipcheck_result .= __('This IP address is present in the frontend blacklist.', 'iq-block-country');
+							$ipcheck_result .= '<br/>';
+						}
+						
+						if (iqblockcountry_validate_ip_in_list($ip_address,$fewhitelistiprange4,$fewhitelistiprange6,$fewhitelistip)) {
+							$ipcheck_result .= __('This IP address is present in the frontend whitelist.', 'iq-block-country');
+							$ipcheck_result .= '<br/>';
+						}
+						
+						if (iqblockcountry_validate_ip_in_list($ip_address,$beblacklistiprange4,$beblacklistiprange6,$beblacklistip)) {
+							$ipcheck_result .= __('This IP address is present in the backend blacklist.', 'iq-block-country');
+							$ipcheck_result .= '<br/>';
+						}
+						
+						if (iqblockcountry_validate_ip_in_list($ip_address,$bewhitelistiprange4,$bewhitelistiprange6,$beblacklistip)) {
+							$ipcheck_result .= __('This IP address is present in the backend whitelist.', 'iq-block-country');
+							$ipcheck_result .= '<br/>';
+						}
+					}
+				}
+				break;
+				
+			// Update GeoIP2 database
+			case 'updategeoip2db':
+				$update_response = iqblockcountry_update_GeoIP2DB(true);
+				break;
+				
+			// Set GeoIP2 license key
+			case 'setgeoip2dblicense':
+				if (isset($_POST['setgeoip2dblicense_key'])) {
+					$setgeoip2dblicense_key = sanitize_text_field($_POST['setgeoip2dblicense_key']);
+					if ( update_option('blockcountry_maxmind_license_key', $setgeoip2dblicense_key, 'yes') ) {
+						// Poor man's choice to remove an admin notice which is already visible.
+						header('Location: ' . site_url() . '/wp-admin/options-general.php?page=iq-block-country/libs/blockcountry-settings.php&tab=tools');
+						die();
+					}
+				}
+				break;
 		}
-		iqblockcountry_update_GeoIP2DB(true);
 	}
 	
 	?><h3><?php _e('Check which country belongs to an IP Address according to the current database.', 'iq-block-country'); ?></h3>
@@ -410,98 +555,18 @@ function iqblockcountry_settings_tools() {
 		<input type="hidden" name="action" value="ipcheck" />
 		<input name="ipcheck_nonce" type="hidden" value="<?php echo wp_create_nonce('ipcheck_nonce'); ?>" />
 		<?php _e('IP Address to check:', 'iq-block-country'); ?> <input type="text" name="ipaddress" lenth="50" /><?php 
-		
-		if (isset($_POST['ipaddress']) && !empty($_POST['ipaddress'])) {
-			$ip_address = $_POST['ipaddress'];
-			
-			if (iqblockcountry_is_valid_ipv4($ip_address) || iqblockcountry_is_valid_ipv6($ip_address)) {
-				$country = iqblockcountry_check_ipaddress($ip_address);
-				$countrylist = iqblockcountry_get_isocountries();
-				
-				if ($country == "Unknown" || $country == "ipv6" || $country == "" || $country == "FALSE") {
-					echo "<p>" . __('No country for', 'iq-block-country') . ' ' . $ip_address . ' ' . __('could be found. Or', 'iq-block-country') . ' ' . $ip_address . ' ' . __('is not a valid IPv4 or IPv6 IP address', 'iq-block-country'); 
-					echo "</p>";
-				} else {
-					$displaycountry = $countrylist[$country];
-					echo "<p>" . __('IP Adress', 'iq-block-country') . ' ' . $ip_address . ' ' . __('belongs to', 'iq-block-country') . ' ' . $displaycountry . ".</p>";
-					$haystack = get_option('blockcountry_banlist');
-					
-					if (!is_array($haystack)) {
-						$haystack = array();
-					}
-					
-					$inverse = get_option( 'blockcountry_banlist_inverse');
-					
-					if ($inverse) {
-						if (is_array($haystack) && !in_array ($country, $haystack )) {
-							_e('This country is not permitted to visit the frontend of this website.', 'iq-block-country');
-							echo "<br />";
-						}
-					} else {						   
-						if (is_array($haystack) && in_array ( $country, $haystack )) {
-							_e('This country is not permitted to visit the frontend of this website.', 'iq-block-country');
-							echo "<br />";
-						}
-					}
-					
-					$inverse = get_option( 'blockcountry_backendbanlist_inverse');
-					$haystack = get_option('blockcountry_backendbanlist');
-					
-					if (!is_array($haystack)) {
-						$haystack = array();
-					}
-					
-					if ($inverse) {
-						if (is_array($haystack) && !in_array ( $country, $haystack )) {
-							_e('This country is not permitted to visit the backend of this website.', 'iq-block-country');
-							echo "<br />";
-						}
-					} else {	
-						if (is_array($haystack) && in_array ( $country, $haystack )) {
-							_e('This country is not permitted to visit the backend of this website.', 'iq-block-country');
-							echo "<br />";
-						}
-					}
-					
-					$backendbanlistip = unserialize(get_option('blockcountry_backendbanlistip'));
-					
-					if (is_array($backendbanlistip) &&  in_array($ip_address,$backendbanlistip)) {
-						_e('This IP address is present in the blacklist.', 'iq-block-country');
-					}
-				}
-				
-				if (iqblockcountry_validate_ip_in_list($ip_address,$feblacklistiprange4,$feblacklistiprange6,$feblacklistip)) {
-					_e('This IP address is present in the frontend blacklist.', 'iq-block-country');
-					echo "<br />";
-				}
-				
-				if (iqblockcountry_validate_ip_in_list($ip_address,$fewhitelistiprange4,$fewhitelistiprange6,$fewhitelistip)) {
-					_e('This IP address is present in the frontend whitelist.', 'iq-block-country');
-					echo "<br />";
-				}
-				
-				if (iqblockcountry_validate_ip_in_list($ip_address,$beblacklistiprange4,$beblacklistiprange6,$beblacklistip)) {
-					_e('This IP address is present in the backend blacklist.', 'iq-block-country');
-					echo "<br />";
-				}
-				
-				if (iqblockcountry_validate_ip_in_list($ip_address,$bewhitelistiprange4,$bewhitelistiprange6,$beblacklistip)) {
-					_e('This IP address is present in the backend whitelist.', 'iq-block-country');
-					echo "<br />";
-				}
-			}
-		}
-		
+
+		echo $ipcheck_result;
+
 		echo '<div class="submit"><input type="submit" class="button" name="test" value="' . __( 'Check IP address', 'iq-block-country' ) . '" /></div>';
 		wp_nonce_field('iqblockcountry');
-
 	?></form>
 	<hr />
 	<h3><?php _e('Database information', 'iq-block-country'); ?></h3><?php
 		
 	$format = get_option('date_format') . ' ' . get_option('time_format');
 	/* Check if the Geo Database exists */
-	if (is_file ( GEOIP2DBFILE )) {
+	if (is_file(GEOIP2DBFILE)) {
 		_e("GeoIP2 database exists. File date: ", 'iq-block-country');
 		$iqfiledate = filemtime(GEOIP2DBFILE);
 		echo date($format, $iqfiledate) . " ";
@@ -514,11 +579,36 @@ function iqblockcountry_settings_tools() {
 		_e("GeoIP2 database does not exist.", 'iq-block-country');
 	}
 	?><br/>
-	<br/>
-	<form name="updategeoip2db" action="#updategeoip2db" method="post">
+	<br/><?php 
+	if (isset($update_response) && $update_response != 200) {
+		if ($update_response <= 0) {
+			echo __('Could not connect to server: ' . GEOIP2DB, 'iq-block-country');
+		} else {
+			echo __('Download failed with error-code ' . $update_response, 'iq-block-country');
+		}
+		?><br/>
+		<br/><?php 
+	}
+
+	$update_button_disabled = '';
+	if (empty($maxmind_license_key) || $maxmind_license_key === false) {
+		$update_button_disabled = 'disabled';
+	}
+	
+	?><form name="updategeoip2db" action="#updategeoip2db" method="post">
 		<input type="hidden" name="action" value="updategeoip2db" />
 		<input name="updategeoip2db_nonce" type="hidden" value="<?php echo wp_create_nonce('updategeoip2db_nonce'); ?>" />
-		<input type="submit" class="button" name="update" value="<?php echo __('Update', 'iq-block-country')?>"/>
+		<input type="submit" class="button" name="update" value="<?php echo __('Update', 'iq-block-country')?>" <?php echo $update_button_disabled;?>/>
+		<?php wp_nonce_field('iqblockcountry');?>
+	</form>
+	<br/>
+	<hr/>
+	<h3><?php _e('MaxMind GeoIP2 database license', 'iq-block-country'); ?></h3>
+	<form name="setgeoip2dblicense" action="#setgeoip2dblicense" method="post">
+		<input type="hidden" name="action" value="setgeoip2dblicense" />
+		<input name="setgeoip2dblicense_nonce" type="hidden" value="<?php echo wp_create_nonce('setgeoip2dblicense_nonce');?>" />
+		<input name="setgeoip2dblicense_key" type="text" placeholder="License key" value="<?php echo $maxmind_license_key;?>" />
+		<input type="submit" class="button" name="save" value="<?php echo __('Save', 'iq-block-country');?>"/>
 		<?php wp_nonce_field('iqblockcountry');?>
 	</form><?php
 }
@@ -888,7 +978,7 @@ function iqblockcountry_settings_services() {
  */
 function iqblockcountry_settings_frontend() {
 	if (!class_exists('GeoIP')) {
-		include_once("geoip.inc");
+		include_once('geoip.php');
 	}
 	
 	?><h3><?php _e('Frontend options', 'iq-block-country'); ?></h3><?php
@@ -993,7 +1083,7 @@ function iqblockcountry_settings_frontend() {
 function iqblockcountry_settings_backend() {
 	?><h3><?php _e('Backend Options', 'iq-block-country'); ?></h3><?php
 	if (!class_exists('GeoIP')) {
-		include_once("geoip.inc");
+		include_once('geoip.php');
 	}
 	
 	$countrylist = iqblockcountry_get_isocountries();
@@ -1118,7 +1208,7 @@ function iqblockcountry_settings_home() {
 	<p><?php echo number_format($blockedfrontendnr);?> <?php _e('visitors blocked from the frontend.', 'iq-block-country');?></p><?php
 
 	if (!class_exists('GeoIP')) {
-		include_once("geoip.inc");
+		include_once('geoip.php');
 	}
 	
 	$blockmessage = get_option('blockcountry_blockmessage');
@@ -1462,7 +1552,7 @@ function iqblockcountry_settings_page() {
 	</h2>  
 	
 	<div class="wrap">
-		<h2>iQ Block Country Lite</h2>
+		<h2><?php echo PLUGINNAME;?></h2>
 		<hr /><?php
 		
 		switch ($active_tab) {

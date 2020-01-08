@@ -1,5 +1,5 @@
 # iQ Block Country Lite
-This is a rewrite of Pascal's iQ Block Country plugin for WordPress. Please don't bother Pascal if you have issues with this plugin. If it doesn't work, you're on your own. I just created this version for myself and I'm sharing it with you for free. Don't expect any support from my side. If there's a bug maybe it gets fixed in the next version. Or fix it yourself. This is open-source software.
+This is a rewrite of Pascal's iQ Block Country plugin for WordPress. Please don't bother Pascal if you have issues with this plugin. If it doesn't work, you're on your own. I just created this version for myself and I'm sharing it with you for free. Don't expect any support from my side. If there's a bug maybe it gets fixed in the next version. Or fix it yourself. This is free open-source software.
 
 ## Description
 It allows or disallows visitors from certain countries accessing (parts of) your website.
@@ -34,7 +34,7 @@ Data which is stored on non blocked visitors:
 - Nothing
 
 ##  No tracking
-The original plugin had a tracking feature, which could be enabled (disabled by default). Tracking features as well as the Webence API has been completely removed.
+The original plugin had a tracking feature, which could be enabled (disabled by default). Tracking features as well as the Webence API have been completely removed.
 
 ## Use of caching plugins
 Please note that many of the caching plugins are not compatible with this plugin. The nature of caching is that a dynamically build web page is cached into a static page. If a visitor is blocked this plugin sends header data where it supplies info that the page should not be cached. Many plugins however disregard this info and cache the page or the redirect. Resulting in valid visitors receiving a message that they are blocked. This is not a malfunction of this plugin.
@@ -45,14 +45,15 @@ Plugins that do NOT work: W3 Total Cache, Hyper cache, WPRocket
 
 ## Installation
 1. Unzip the archive and put the `iq-block-country` folder into your plugins folder (/wp-content/plugins/).
-2. The GeoLite2 database ist downloaded automatically if it does not exist. If for whatever reason the download fails, please download the database manually from [MaxMind](http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz). Unzip the database and put the GeoLite2-Country.mmdb file into the plugin's db folder, usually /wp-content/iq-block-country/db/GeoLite2-Country.mmdb
-3. Activate the plugin through the 'Plugins' menu in WordPress
+2. Activate the plugin through the 'Plugins' menu in WordPress
+3. Set your MaxMind license key in the plugin settings.
+4. The GeoLite2 database is downloaded automatically if it does not exist.
 4. Go to the settings page and choose which countries you want to ban. Use the ctrl key to select multiple countries.
 
 ## How can I get a new version of the GeoIP database?
-Maxmind updates the GeoLite database every month. The plugin checks automatically every three months for database updates, which should be sufficient. You also may download the database directly from MaxMind and upload them to your website.
+MaxMind updates the GeoLite database every month. The plugin checks automatically every three months for database updates, which should be sufficient. You also may download the database directly from MaxMind and upload them to your website.
 
-1. Download the GeoIP2 Country database from [MaxMind](http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz)
+1. Download the GeoIP2 Country database from [MaxMind](https://www.maxmind.com)
 2. Unzip the GeoIP2 database and put the GeoLite2-Country.mmdb file into the plugin's db folder, usually /wp-content/iq-block-country/db/GeoLite2-Country.mmdb
 
 Or

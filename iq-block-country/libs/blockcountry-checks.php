@@ -1,9 +1,12 @@
 <?php
-
+// Exit if accessed directly.
+if (!defined('ABSPATH')) {
+	exit;
+}
 
 function iqblockcountry_check_ipaddress($ip_address) {
 	if (!class_exists('GeoIP')) {
-		include_once 'geoip.inc';
+		include_once 'geoip.php';
 	}
 	
 	$country = 'Unknown';

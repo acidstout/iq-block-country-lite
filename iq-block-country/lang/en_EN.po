@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: iQ Block Country\n"
-"POT-Creation-Date: 2019-05-20 16:32+0200\n"
-"PO-Revision-Date: 2019-05-20 16:32+0200\n"
+"POT-Creation-Date: 2020-01-04 19:11+0100\n"
+"PO-Revision-Date: 2020-01-04 19:12+0100\n"
 "Last-Translator: Pascal <pascal@webence.nl>\n"
 "Language-Team: iQ Block Country <info@redeo.nl>\n"
 "Language: en\n"
@@ -21,785 +21,795 @@ msgid ""
 "manually or if you wish to use the GeoIP API get an API key from: "
 msgstr ""
 
-#: libs/blockcountry-settings.php:67 libs/blockcountry-settings.php:91
-#: libs/blockcountry-settings.php:130
-msgid "Please download the database from: "
+#: libs/blockcountry-settings.php:67 libs/blockcountry-settings.php:92
+msgid "Please download the database (GeoLite2-Country.tar.gz) from: "
 msgstr ""
 
-#: libs/blockcountry-settings.php:69 libs/blockcountry-settings.php:93
+#: libs/blockcountry-settings.php:68 libs/blockcountry-settings.php:93
+#: libs/blockcountry-settings.php:133
+msgid ""
+"If you do not have an account at Maxmind yet for the Geolite2 database sign "
+"up for a free account at:"
+msgstr ""
+
+#: libs/blockcountry-settings.php:70 libs/blockcountry-settings.php:95
 msgid ""
 "unzip the file and afterwards upload the GeoLite2-Country.mmdb file to the "
 "following location: "
 msgstr ""
 
-#: libs/blockcountry-settings.php:72 libs/blockcountry-settings.php:96
-#: libs/blockcountry-settings.php:135
+#: libs/blockcountry-settings.php:73 libs/blockcountry-settings.php:98
+#: libs/blockcountry-settings.php:138
 msgid "For more detailed instructions take a look at the documentation.."
 msgstr ""
 
-#: libs/blockcountry-settings.php:89
+#: libs/blockcountry-settings.php:90
 msgid ""
 "Please upgrade your old GeoIP database. This database is no longer "
 "maintained by MaxMind and everyone should upgrade to the GeoIP2 database."
 "<br />"
 msgstr ""
 
-#: libs/blockcountry-settings.php:90
+#: libs/blockcountry-settings.php:91
 msgid ""
 "The MaxMind GeoIP2 database does not exist yet . Please download this file "
 "manually or if you wish to use the GeoIP API get an API key from: "
 msgstr ""
 
-#: libs/blockcountry-settings.php:112
+#: libs/blockcountry-settings.php:114
 msgid "A caching plugin appears to be active on your WordPress installation."
 msgstr ""
 
-#: libs/blockcountry-settings.php:113
+#: libs/blockcountry-settings.php:115
 msgid ""
 "Caching plugins do not always cooperate nicely together with the iQ Block "
 "Country plugin which may lead to non blocked visitors getting a cached "
 "banned message or page."
 msgstr ""
 
-#: libs/blockcountry-settings.php:114
+#: libs/blockcountry-settings.php:116
 msgid "For more information visit the following page:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:129
+#: libs/blockcountry-settings.php:131
 msgid ""
 "The MaxMind GeoIP database is older than 3 months. Please update this file "
 "manually or if you wish to use the GeoIP API get an API key from: "
 msgstr ""
 
 #: libs/blockcountry-settings.php:132
+msgid "Please download the database (GeoLite2-Country.tar.gz) from MaxMind. "
+msgstr ""
+
+#: libs/blockcountry-settings.php:135
 msgid "unzip the file and afterwards upload it to the following location: "
 msgstr ""
 
-#: libs/blockcountry-settings.php:306
+#: libs/blockcountry-settings.php:309
 msgid ""
 "Check which country belongs to an IP Address according to the current "
 "database."
 msgstr ""
 
-#: libs/blockcountry-settings.php:311
+#: libs/blockcountry-settings.php:314
 msgid "IP Address to check:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:329
+#: libs/blockcountry-settings.php:332
 msgid "No country for"
 msgstr ""
 
-#: libs/blockcountry-settings.php:329
+#: libs/blockcountry-settings.php:332
 msgid "could be found. Or"
 msgstr ""
 
-#: libs/blockcountry-settings.php:329
+#: libs/blockcountry-settings.php:332
 msgid "is not a valid IPv4 or IPv6 IP address"
 msgstr ""
 
-#: libs/blockcountry-settings.php:334
+#: libs/blockcountry-settings.php:337
 msgid "IP Adress"
 msgstr ""
 
-#: libs/blockcountry-settings.php:334
+#: libs/blockcountry-settings.php:337
 msgid "belongs to"
 msgstr ""
 
-#: libs/blockcountry-settings.php:340 libs/blockcountry-settings.php:345
+#: libs/blockcountry-settings.php:343 libs/blockcountry-settings.php:348
 msgid "This country is not permitted to visit the frontend of this website."
 msgstr ""
 
-#: libs/blockcountry-settings.php:354 libs/blockcountry-settings.php:361
+#: libs/blockcountry-settings.php:357 libs/blockcountry-settings.php:364
 msgid "This country is not permitted to visit the backend of this website."
 msgstr ""
 
-#: libs/blockcountry-settings.php:367
+#: libs/blockcountry-settings.php:370
 msgid "This IP address is present in the blacklist."
 msgstr ""
 
-#: libs/blockcountry-settings.php:373
+#: libs/blockcountry-settings.php:376
 msgid "This IP address is present in the frontend blacklist."
 msgstr ""
 
-#: libs/blockcountry-settings.php:378
+#: libs/blockcountry-settings.php:381
 msgid "This IP address is present in the frontend whitelist."
 msgstr ""
 
-#: libs/blockcountry-settings.php:383
+#: libs/blockcountry-settings.php:386
 msgid "This IP address is present in the backend blacklist."
 msgstr ""
 
-#: libs/blockcountry-settings.php:388
+#: libs/blockcountry-settings.php:391
 msgid "This IP address is present in the backend whitelist."
 msgstr ""
 
-#: libs/blockcountry-settings.php:395
+#: libs/blockcountry-settings.php:398
 msgid "Check IP address"
 msgstr ""
 
-#: libs/blockcountry-settings.php:403
+#: libs/blockcountry-settings.php:406
 msgid "Database information"
 msgstr ""
 
-#: libs/blockcountry-settings.php:414
+#: libs/blockcountry-settings.php:417
 msgid "IPv4 database exists. File date: "
 msgstr ""
 
-#: libs/blockcountry-settings.php:421 libs/blockcountry-settings.php:457
+#: libs/blockcountry-settings.php:424 libs/blockcountry-settings.php:460
 msgid "Database is older than 3 months... Please update..."
 msgstr ""
 
-#: libs/blockcountry-settings.php:426
+#: libs/blockcountry-settings.php:429
 msgid "IPv4 database does not exist."
 msgstr ""
 
-#: libs/blockcountry-settings.php:432
+#: libs/blockcountry-settings.php:435
 msgid "IPv6 database exists. File date: "
 msgstr ""
 
-#: libs/blockcountry-settings.php:439
+#: libs/blockcountry-settings.php:442
 msgid "Database is older than 3 months...  Please update..."
 msgstr ""
 
-#: libs/blockcountry-settings.php:444
+#: libs/blockcountry-settings.php:447
 msgid "IPv6 database does not exist."
 msgstr ""
 
-#: libs/blockcountry-settings.php:450
+#: libs/blockcountry-settings.php:453
 msgid "GeoIP2 database exists. File date: "
 msgstr ""
 
-#: libs/blockcountry-settings.php:462
+#: libs/blockcountry-settings.php:465
 msgid "GeoIP2 database does not exist."
 msgstr ""
 
-#: libs/blockcountry-settings.php:469
+#: libs/blockcountry-settings.php:472
 msgid "Your GeoIP API key is valid till: "
 msgstr ""
 
-#: libs/blockcountry-settings.php:478
+#: libs/blockcountry-settings.php:481
 msgid "Active plugins"
 msgstr ""
 
-#: libs/blockcountry-settings.php:485
+#: libs/blockcountry-settings.php:488
 msgid "Plugin name"
 msgstr ""
 
-#: libs/blockcountry-settings.php:485
+#: libs/blockcountry-settings.php:488
 msgid "Version"
 msgstr ""
 
-#: libs/blockcountry-settings.php:485 libs/blockcountry-settings.php:1689
-#: libs/blockcountry-settings.php:1748
+#: libs/blockcountry-settings.php:488 libs/blockcountry-settings.php:1692
+#: libs/blockcountry-settings.php:1763
 msgid "URL"
 msgstr ""
 
-#: libs/blockcountry-settings.php:504
+#: libs/blockcountry-settings.php:507
 msgid "none"
 msgstr ""
 
-#: libs/blockcountry-settings.php:510 libs/blockcountry-settings.php:511
+#: libs/blockcountry-settings.php:513 libs/blockcountry-settings.php:514
 msgid "unavailable"
 msgstr ""
 
-#: libs/blockcountry-settings.php:515
+#: libs/blockcountry-settings.php:518
 msgid "File System Information"
 msgstr ""
 
-#: libs/blockcountry-settings.php:518
+#: libs/blockcountry-settings.php:521
 msgid "Website Root Folder"
 msgstr ""
 
-#: libs/blockcountry-settings.php:519 libs/blockcountry-settings.php:713
+#: libs/blockcountry-settings.php:522 libs/blockcountry-settings.php:716
 msgid "Document Root Path"
 msgstr ""
 
-#: libs/blockcountry-settings.php:523
+#: libs/blockcountry-settings.php:526
 msgid "Database Information"
 msgstr ""
 
-#: libs/blockcountry-settings.php:525
+#: libs/blockcountry-settings.php:528
 msgid "MySQL Database Version"
 msgstr ""
 
-#: libs/blockcountry-settings.php:526
+#: libs/blockcountry-settings.php:529
 msgid "MySQL Client Version"
 msgstr ""
 
-#: libs/blockcountry-settings.php:527
+#: libs/blockcountry-settings.php:530
 msgid "Database Host"
 msgstr ""
 
-#: libs/blockcountry-settings.php:533
+#: libs/blockcountry-settings.php:536
 msgid "Not Set"
 msgstr ""
 
-#: libs/blockcountry-settings.php:535 libs/blockcountry-settings.php:615
-#: libs/blockcountry-settings.php:623 libs/blockcountry-settings.php:631
-#: libs/blockcountry-settings.php:639 libs/blockcountry-settings.php:648
-#: libs/blockcountry-settings.php:665
+#: libs/blockcountry-settings.php:538 libs/blockcountry-settings.php:618
+#: libs/blockcountry-settings.php:626 libs/blockcountry-settings.php:634
+#: libs/blockcountry-settings.php:642 libs/blockcountry-settings.php:651
+#: libs/blockcountry-settings.php:668
 msgid "Off"
 msgstr ""
 
-#: libs/blockcountry-settings.php:538
+#: libs/blockcountry-settings.php:541
 msgid "SQL Mode"
 msgstr ""
 
-#: libs/blockcountry-settings.php:542
+#: libs/blockcountry-settings.php:545
 msgid "Server Information"
 msgstr ""
 
-#: libs/blockcountry-settings.php:547
+#: libs/blockcountry-settings.php:550
 msgid "Server IP Address"
 msgstr ""
 
-#: libs/blockcountry-settings.php:549
+#: libs/blockcountry-settings.php:552
 msgid "Server Type"
 msgstr ""
 
-#: libs/blockcountry-settings.php:550
+#: libs/blockcountry-settings.php:553
 msgid "Operating System"
 msgstr ""
 
-#: libs/blockcountry-settings.php:551
+#: libs/blockcountry-settings.php:554
 msgid "Browser Compression Supported"
 msgstr ""
 
-#: libs/blockcountry-settings.php:567
+#: libs/blockcountry-settings.php:570
 msgid "undefined"
 msgstr ""
 
-#: libs/blockcountry-settings.php:574
+#: libs/blockcountry-settings.php:577
 msgid "PHP Process User (UID:GID)"
 msgstr ""
 
-#: libs/blockcountry-settings.php:579
+#: libs/blockcountry-settings.php:582
 msgid "PHP Information"
 msgstr ""
 
-#: libs/blockcountry-settings.php:584
+#: libs/blockcountry-settings.php:587
 msgid "PHP Version"
 msgstr ""
 
-#: libs/blockcountry-settings.php:585
+#: libs/blockcountry-settings.php:588
 msgid "PHP Memory Usage"
 msgstr ""
 
-#: libs/blockcountry-settings.php:585
+#: libs/blockcountry-settings.php:588
 msgid " MB"
 msgstr ""
 
-#: libs/blockcountry-settings.php:591 libs/blockcountry-settings.php:599
-#: libs/blockcountry-settings.php:607 libs/blockcountry-settings.php:656
+#: libs/blockcountry-settings.php:594 libs/blockcountry-settings.php:602
+#: libs/blockcountry-settings.php:610 libs/blockcountry-settings.php:659
 msgid "N/A"
 msgstr ""
 
-#: libs/blockcountry-settings.php:594
+#: libs/blockcountry-settings.php:597
 msgid "PHP Memory Limit"
 msgstr ""
 
-#: libs/blockcountry-settings.php:602
+#: libs/blockcountry-settings.php:605
 msgid "PHP Max Upload Size"
 msgstr ""
 
-#: libs/blockcountry-settings.php:610
+#: libs/blockcountry-settings.php:613
 msgid "PHP Max Post Size"
 msgstr ""
 
-#: libs/blockcountry-settings.php:613 libs/blockcountry-settings.php:621
-#: libs/blockcountry-settings.php:629 libs/blockcountry-settings.php:637
-#: libs/blockcountry-settings.php:646 libs/blockcountry-settings.php:663
+#: libs/blockcountry-settings.php:616 libs/blockcountry-settings.php:624
+#: libs/blockcountry-settings.php:632 libs/blockcountry-settings.php:640
+#: libs/blockcountry-settings.php:649 libs/blockcountry-settings.php:666
 msgid "On"
 msgstr ""
 
-#: libs/blockcountry-settings.php:618
+#: libs/blockcountry-settings.php:621
 msgid "PHP Allow URL fopen"
 msgstr ""
 
-#: libs/blockcountry-settings.php:626
+#: libs/blockcountry-settings.php:629
 msgid "PHP Allow URL Include"
 msgstr ""
 
-#: libs/blockcountry-settings.php:634
+#: libs/blockcountry-settings.php:637
 msgid "PHP Display Errors"
 msgstr ""
 
-#: libs/blockcountry-settings.php:642
+#: libs/blockcountry-settings.php:645
 msgid "PHP Display Startup Errors"
 msgstr ""
 
-#: libs/blockcountry-settings.php:651
+#: libs/blockcountry-settings.php:654
 msgid "PHP Expose PHP"
 msgstr ""
 
-#: libs/blockcountry-settings.php:659
+#: libs/blockcountry-settings.php:662
 msgid "PHP Max Script Execution Time"
 msgstr ""
 
-#: libs/blockcountry-settings.php:660
+#: libs/blockcountry-settings.php:663
 msgid "Seconds"
 msgstr ""
 
-#: libs/blockcountry-settings.php:668
+#: libs/blockcountry-settings.php:671
 msgid "PHP open_basedir"
 msgstr ""
 
-#: libs/blockcountry-settings.php:671 libs/blockcountry-settings.php:679
+#: libs/blockcountry-settings.php:674 libs/blockcountry-settings.php:682
 msgid "Yes"
 msgstr ""
 
-#: libs/blockcountry-settings.php:673 libs/blockcountry-settings.php:681
+#: libs/blockcountry-settings.php:676 libs/blockcountry-settings.php:684
 msgid "No"
 msgstr ""
 
-#: libs/blockcountry-settings.php:676
+#: libs/blockcountry-settings.php:679
 msgid "PHP XML Support"
 msgstr ""
 
-#: libs/blockcountry-settings.php:684
+#: libs/blockcountry-settings.php:687
 msgid "PHP IPTC Support"
 msgstr ""
 
-#: libs/blockcountry-settings.php:686
+#: libs/blockcountry-settings.php:689
 msgid "Disabled PHP Functions"
 msgstr ""
 
-#: libs/blockcountry-settings.php:693
+#: libs/blockcountry-settings.php:696
 msgid "Wordpress info"
 msgstr ""
 
-#: libs/blockcountry-settings.php:698
+#: libs/blockcountry-settings.php:701
 msgid "is enabled"
 msgstr ""
 
-#: libs/blockcountry-settings.php:700
+#: libs/blockcountry-settings.php:703
 msgid "is disabled"
 msgstr ""
 
-#: libs/blockcountry-settings.php:703
+#: libs/blockcountry-settings.php:706
 msgid " Multisite"
 msgstr ""
 
-#: libs/blockcountry-settings.php:706
+#: libs/blockcountry-settings.php:709
 msgid "are enabled"
 msgstr ""
 
-#: libs/blockcountry-settings.php:708
+#: libs/blockcountry-settings.php:711
 msgid "are disabled"
 msgstr ""
 
-#: libs/blockcountry-settings.php:711
+#: libs/blockcountry-settings.php:714
 msgid "Permalinks"
 msgstr ""
 
-#: libs/blockcountry-settings.php:718
+#: libs/blockcountry-settings.php:721
 msgid "IP Address information"
 msgstr ""
 
-#: libs/blockcountry-settings.php:725 libs/blockcountry-settings.php:730
-#: libs/blockcountry-settings.php:735 libs/blockcountry-settings.php:740
-#: libs/blockcountry-settings.php:745 libs/blockcountry-settings.php:750
-#: libs/blockcountry-settings.php:755 libs/blockcountry-settings.php:760
-#: libs/blockcountry-settings.php:765
+#: libs/blockcountry-settings.php:728 libs/blockcountry-settings.php:733
+#: libs/blockcountry-settings.php:738 libs/blockcountry-settings.php:743
+#: libs/blockcountry-settings.php:748 libs/blockcountry-settings.php:753
+#: libs/blockcountry-settings.php:758 libs/blockcountry-settings.php:763
+#: libs/blockcountry-settings.php:768
 msgid "Not set"
 msgstr ""
 
-#: libs/blockcountry-settings.php:781
+#: libs/blockcountry-settings.php:784
 msgid "Export"
 msgstr ""
 
-#: libs/blockcountry-settings.php:782
+#: libs/blockcountry-settings.php:785
 msgid ""
 "When you click on <tt>Backup all settings</tt> button a backup of the iQ "
 "Block Country configuration will be created."
 msgstr ""
 
-#: libs/blockcountry-settings.php:783
+#: libs/blockcountry-settings.php:786
 msgid ""
 "After exporting, you can either use the backup file to restore your settings "
 "on this site again or copy the settings to another WordPress site."
 msgstr ""
 
-#: libs/blockcountry-settings.php:787
+#: libs/blockcountry-settings.php:790
 msgid "Backup all settings"
 msgstr ""
 
-#: libs/blockcountry-settings.php:794
+#: libs/blockcountry-settings.php:797
 msgid "Import"
 msgstr ""
 
-#: libs/blockcountry-settings.php:795
+#: libs/blockcountry-settings.php:798
 msgid "Click the browse button and choose a zip file that you exported before."
 msgstr ""
 
-#: libs/blockcountry-settings.php:796
+#: libs/blockcountry-settings.php:799
 msgid "Press Restore settings button, and let WordPress do the magic for you."
 msgstr ""
 
-#: libs/blockcountry-settings.php:801
+#: libs/blockcountry-settings.php:804
 msgid "Restore settings"
 msgstr ""
 
-#: libs/blockcountry-settings.php:824 libs/blockcountry-settings.php:827
-#: libs/blockcountry-settings.php:836
+#: libs/blockcountry-settings.php:827 libs/blockcountry-settings.php:830
+#: libs/blockcountry-settings.php:839
 msgid "Something went wrong exporting this file"
 msgstr ""
 
-#: libs/blockcountry-settings.php:839
+#: libs/blockcountry-settings.php:842
 msgid "Exporting settings..."
 msgstr ""
 
-#: libs/blockcountry-settings.php:854
+#: libs/blockcountry-settings.php:857
 msgid "Something went wrong importing this file"
 msgstr ""
 
-#: libs/blockcountry-settings.php:871
+#: libs/blockcountry-settings.php:874
 msgid "All options are restored successfully."
 msgstr ""
 
-#: libs/blockcountry-settings.php:874
+#: libs/blockcountry-settings.php:877
 msgid "Invalid file."
 msgstr ""
 
-#: libs/blockcountry-settings.php:879
+#: libs/blockcountry-settings.php:882
 msgid "No correct import or export option given."
 msgstr ""
 
-#: libs/blockcountry-settings.php:888
+#: libs/blockcountry-settings.php:891
 msgid "Select which pages are blocked."
 msgstr ""
 
-#: libs/blockcountry-settings.php:895
+#: libs/blockcountry-settings.php:898
 msgid "Do you want to block individual pages:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:896
+#: libs/blockcountry-settings.php:899
 msgid "If you do not select this option all pages will be blocked."
 msgstr ""
 
-#: libs/blockcountry-settings.php:903
+#: libs/blockcountry-settings.php:906
 msgid "Block pages selected below:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:904
+#: libs/blockcountry-settings.php:907
 msgid "Block all pages except those selected below"
 msgstr ""
 
-#: libs/blockcountry-settings.php:911
+#: libs/blockcountry-settings.php:914
 msgid "Select pages you want to block:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:933 libs/blockcountry-settings.php:987
-#: libs/blockcountry-settings.php:1035 libs/blockcountry-settings.php:1083
-#: libs/blockcountry-settings.php:1130 libs/blockcountry-settings.php:1274
-#: libs/blockcountry-settings.php:1404 libs/blockcountry-settings.php:1656
+#: libs/blockcountry-settings.php:936 libs/blockcountry-settings.php:990
+#: libs/blockcountry-settings.php:1038 libs/blockcountry-settings.php:1086
+#: libs/blockcountry-settings.php:1133 libs/blockcountry-settings.php:1277
+#: libs/blockcountry-settings.php:1407 libs/blockcountry-settings.php:1659
 msgid "Save Changes"
 msgstr ""
 
-#: libs/blockcountry-settings.php:946
+#: libs/blockcountry-settings.php:949
 msgid "Select which categories are blocked."
 msgstr ""
 
-#: libs/blockcountry-settings.php:953
+#: libs/blockcountry-settings.php:956
 msgid "Do you want to block individual categories:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:954 libs/blockcountry-settings.php:1008
+#: libs/blockcountry-settings.php:957 libs/blockcountry-settings.php:1011
 msgid "If you do not select this option all blog articles will be blocked."
 msgstr ""
 
-#: libs/blockcountry-settings.php:959
+#: libs/blockcountry-settings.php:962
 msgid "Do you want to block the homepage:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:960
+#: libs/blockcountry-settings.php:963
 msgid ""
 "If you do not select this option visitors will not be blocked from your "
 "homepage regardless of the categories you select."
 msgstr ""
 
-#: libs/blockcountry-settings.php:965
+#: libs/blockcountry-settings.php:968
 msgid "Select categories you want to block:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1000
+#: libs/blockcountry-settings.php:1003
 msgid "Select which tags are blocked."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1007
+#: libs/blockcountry-settings.php:1010
 msgid "Do you want to block individual tags:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1013
+#: libs/blockcountry-settings.php:1016
 msgid "Select tags you want to block:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1049
+#: libs/blockcountry-settings.php:1052
 msgid "Select which post types are blocked."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1056
+#: libs/blockcountry-settings.php:1059
 msgid "Do you want to block individual post types:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1061
+#: libs/blockcountry-settings.php:1064
 msgid "Select post types you want to block:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1098
+#: libs/blockcountry-settings.php:1101
 msgid "Select which services are allowed."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1105
+#: libs/blockcountry-settings.php:1108
 msgid "Select which services you want to allow:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1106
+#: libs/blockcountry-settings.php:1109
 msgid ""
 "This will allow a service like for instance a search engine to your site "
 "despite if you blocked the country."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1107
+#: libs/blockcountry-settings.php:1110
 msgid "Please note the \"Search Engine Visibility\" should not be selected in "
 msgstr ""
 
-#: libs/blockcountry-settings.php:1107
+#: libs/blockcountry-settings.php:1110
 msgid "reading settings."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1145
+#: libs/blockcountry-settings.php:1148
 msgid "Frontend options"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1172
+#: libs/blockcountry-settings.php:1175
 msgid "Block visitors from visiting the frontend of your website:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1178
+#: libs/blockcountry-settings.php:1181
 msgid ""
 "Do not block visitors that are logged in from visiting frontend website:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1184
+#: libs/blockcountry-settings.php:1187
 msgid "Block visitors from using the search function of your website:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1190 libs/blockcountry-settings.php:1337
+#: libs/blockcountry-settings.php:1193 libs/blockcountry-settings.php:1340
 msgid "Block countries selected below:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1191 libs/blockcountry-settings.php:1338
+#: libs/blockcountry-settings.php:1194 libs/blockcountry-settings.php:1341
 msgid "Block all countries except those selected below"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1198 libs/blockcountry-settings.php:1345
+#: libs/blockcountry-settings.php:1201 libs/blockcountry-settings.php:1348
 msgid "Select the countries:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1199 libs/blockcountry-settings.php:1346
+#: libs/blockcountry-settings.php:1202 libs/blockcountry-settings.php:1349
 msgid "Use the CTRL key to select multiple countries"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1241
+#: libs/blockcountry-settings.php:1244
 msgid "Block tag pages:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1242
+#: libs/blockcountry-settings.php:1245
 msgid "If you select this option tag pages will be blocked."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1248
+#: libs/blockcountry-settings.php:1251
 msgid "Block feed:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1249
+#: libs/blockcountry-settings.php:1252
 msgid "If you select this option feed pages will be blocked."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1257
+#: libs/blockcountry-settings.php:1260
 msgid "Frontend whitelist IPv4 and/or IPv6 addresses:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1257 libs/blockcountry-settings.php:1265
-#: libs/blockcountry-settings.php:1387 libs/blockcountry-settings.php:1395
+#: libs/blockcountry-settings.php:1260 libs/blockcountry-settings.php:1268
+#: libs/blockcountry-settings.php:1390 libs/blockcountry-settings.php:1398
 msgid "Use a semicolon (;) to separate IP addresses"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1257 libs/blockcountry-settings.php:1265
-#: libs/blockcountry-settings.php:1387 libs/blockcountry-settings.php:1395
+#: libs/blockcountry-settings.php:1260 libs/blockcountry-settings.php:1268
+#: libs/blockcountry-settings.php:1390 libs/blockcountry-settings.php:1398
 msgid ""
 "This field accepts single IP addresses as well as ranges in CIDR format."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1265
+#: libs/blockcountry-settings.php:1268
 msgid "Frontend blacklist IPv4 and/or IPv6 addresses:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1294
+#: libs/blockcountry-settings.php:1297
 msgid "Backend Options"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1322
+#: libs/blockcountry-settings.php:1325
 msgid ""
 "Block visitors from visiting the backend (administrator) of your website:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1330
+#: libs/blockcountry-settings.php:1333
 msgid "Your IP address is"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1330
+#: libs/blockcountry-settings.php:1333
 msgid "The country that is listed for this IP address is"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1331
+#: libs/blockcountry-settings.php:1334
 msgid ""
 "Do <strong>NOT</strong> set the 'Block visitors from visiting the backend "
 "(administrator) of your website' and also select"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1331
+#: libs/blockcountry-settings.php:1334
 msgid "below."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1332
+#: libs/blockcountry-settings.php:1335
 msgid ""
 "You will NOT be able to login the next time if you DO block your own country "
 "from visiting the backend."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1387
+#: libs/blockcountry-settings.php:1390
 msgid "Backend whitelist IPv4 and/or IPv6 addresses:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1395
+#: libs/blockcountry-settings.php:1398
 msgid "Backend blacklist IPv4 and/or IPv6 addresses:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1437
+#: libs/blockcountry-settings.php:1440
 msgid "Overall statistics since start"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1440
+#: libs/blockcountry-settings.php:1443
 msgid "visitors blocked from the backend."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1442
+#: libs/blockcountry-settings.php:1445
 msgid "visitors blocked from the frontend."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1459
+#: libs/blockcountry-settings.php:1462
 msgid "Block type"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1461
+#: libs/blockcountry-settings.php:1464
 msgid ""
 "You should choose one of the 3 block options below. This wil either show a "
 "block message, redirect to an internal page or redirect to an external page."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1466
+#: libs/blockcountry-settings.php:1469
 msgid "Message to display when people are blocked:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1477
+#: libs/blockcountry-settings.php:1480
 msgid "Page to redirect to:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1478
+#: libs/blockcountry-settings.php:1481
 msgid ""
 "If you select a page here blocked visitors will be redirected to this page "
 "instead of displaying above block message."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1484
+#: libs/blockcountry-settings.php:1487
 msgid "Choose a page..."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1499
+#: libs/blockcountry-settings.php:1502
 msgid "URL to redirect to:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1500
+#: libs/blockcountry-settings.php:1503
 msgid ""
 "If you enter a URL here blocked visitors will be redirected to this URL "
 "instead of displaying above block message or redirected to a local page."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1507
+#: libs/blockcountry-settings.php:1510
 msgid "General settings"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1511
+#: libs/blockcountry-settings.php:1514
 msgid "Send headers when user is blocked:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1512
+#: libs/blockcountry-settings.php:1515
 msgid ""
 "Under normal circumstances you should keep this selected! Only if you have "
 "\"Cannot modify header information - headers already sent\" errors or if you "
 "know what you are doing uncheck this."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1518
+#: libs/blockcountry-settings.php:1521
 msgid "Buffer output?:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1519
+#: libs/blockcountry-settings.php:1522
 msgid ""
 "You can use this option to buffer all output. This can be helpful in case "
 "you have \"headers already sent\" issues."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1525
+#: libs/blockcountry-settings.php:1528
 msgid "Do not log IP addresses:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1526
+#: libs/blockcountry-settings.php:1529
 msgid ""
 "Check this box if the laws in your country do not permit you to log IP "
 "addresses or if you do not want to log the ip addresses."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1532
+#: libs/blockcountry-settings.php:1535
 msgid "Do not block admin-ajax.php:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1533
+#: libs/blockcountry-settings.php:1536
 msgid "Check this box if you use a plugin that uses admin-ajax.php."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1542
+#: libs/blockcountry-settings.php:1545
 msgid "Number of rows on logging tab:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1543
+#: libs/blockcountry-settings.php:1546
 msgid "How many rows do you want to display on each column on the logging tab."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1558
+#: libs/blockcountry-settings.php:1561
 msgid "Number of days to keep logging:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1559
+#: libs/blockcountry-settings.php:1562
 msgid "How many days do you want to keep the logging used for the logging tab."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1574
+#: libs/blockcountry-settings.php:1577
 msgid "Do not lookup hosts on the logging tab:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1575
+#: libs/blockcountry-settings.php:1578
 msgid ""
 "On some hosting environments looking up hosts may slow down the logging tab."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1581
+#: libs/blockcountry-settings.php:1584
 msgid "Allow tracking:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1582
+#: libs/blockcountry-settings.php:1585
 msgid ""
 "This sends only the IP address and the number of attempts this ip address "
 "tried to login to your backend and was blocked doing so to a central server. "
@@ -807,168 +817,168 @@ msgid ""
 "countries."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1588
+#: libs/blockcountry-settings.php:1591
 msgid "GeoIP API Key:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1589
+#: libs/blockcountry-settings.php:1592
 msgid ""
 "If for some reason you cannot or do not want to download the MaxMind GeoIP "
 "databases you will need an API key for the GeoIP api.<br />You can get an "
 "API key from: "
 msgstr ""
 
-#: libs/blockcountry-settings.php:1597
+#: libs/blockcountry-settings.php:1600
 msgid "GeoIP API Key Server Location:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1598
+#: libs/blockcountry-settings.php:1601
 msgid "Choose a location closest to your own location."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1611
+#: libs/blockcountry-settings.php:1614
 msgid "Admin block API Key:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1612
+#: libs/blockcountry-settings.php:1615
 msgid ""
 "For additional security you can protect your backend from known IP addresses "
 "who have made hack attempts at other WordPress sites.<br />You can get more "
 "information and an API key from: "
 msgstr ""
 
-#: libs/blockcountry-settings.php:1620
+#: libs/blockcountry-settings.php:1623
 msgid "Accessibility options:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1621
+#: libs/blockcountry-settings.php:1624
 msgid "Set this option if you cannot use the default country selection box."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1627
+#: libs/blockcountry-settings.php:1630
 msgid "Override IP information:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1628
+#: libs/blockcountry-settings.php:1631
 msgid ""
 "This option allows you to override how iQ Block Country gets the real IP of "
 "your visitors."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1647
+#: libs/blockcountry-settings.php:1650
 msgid "Log all visits:"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1648
+#: libs/blockcountry-settings.php:1651
 msgid ""
 "This logs all visits despite if they are blocked or not. This is only for "
 "debugging purposes."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1674
+#: libs/blockcountry-settings.php:1677
 msgid "Last blocked visits"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1689
+#: libs/blockcountry-settings.php:1692
 msgid "Date / Time"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1689 libs/blockcountry-settings.php:1727
+#: libs/blockcountry-settings.php:1692 libs/blockcountry-settings.php:1742
 msgid "IP Address"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1689 libs/blockcountry-settings.php:1727
+#: libs/blockcountry-settings.php:1692 libs/blockcountry-settings.php:1742
 msgid "Hostname"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1689 libs/blockcountry-settings.php:1714
+#: libs/blockcountry-settings.php:1692 libs/blockcountry-settings.php:1729
 msgid "Country"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1689
+#: libs/blockcountry-settings.php:1692
 msgid "Frontend/Backend"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1705 libs/blockcountry-settings.php:1815
+#: libs/blockcountry-settings.php:1720 libs/blockcountry-settings.php:1830
 msgid "Frontend"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1705
+#: libs/blockcountry-settings.php:1720
 msgid "Backend banlist"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1705
+#: libs/blockcountry-settings.php:1720
 msgid "Backend & Backend banlist"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1705 libs/blockcountry-settings.php:1816
+#: libs/blockcountry-settings.php:1720 libs/blockcountry-settings.php:1831
 msgid "Backend"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1712
+#: libs/blockcountry-settings.php:1727
 msgid "Top countries that are blocked"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1714 libs/blockcountry-settings.php:1727
-#: libs/blockcountry-settings.php:1748
+#: libs/blockcountry-settings.php:1729 libs/blockcountry-settings.php:1742
+#: libs/blockcountry-settings.php:1763
 msgid "# of blocked attempts"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1725
+#: libs/blockcountry-settings.php:1740
 msgid "Top hosts that are blocked"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1746
+#: libs/blockcountry-settings.php:1761
 msgid "Top URLs that are blocked"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1762
+#: libs/blockcountry-settings.php:1777
 msgid "Clear database"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1785
+#: libs/blockcountry-settings.php:1800
 msgid "Download as CSV file"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1792
+#: libs/blockcountry-settings.php:1807
 msgid ""
 "You are not logging any information. Please uncheck the option 'Do not log "
 "IP addresses' if this is not what you want."
 msgstr ""
 
-#: libs/blockcountry-settings.php:1814
+#: libs/blockcountry-settings.php:1829
 msgid "Home"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1817
+#: libs/blockcountry-settings.php:1832
 msgid "Pages"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1818
+#: libs/blockcountry-settings.php:1833
 msgid "Categories"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1819
+#: libs/blockcountry-settings.php:1834
 msgid "Tags"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1819
+#: libs/blockcountry-settings.php:1834
 msgid "Post types"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1820
+#: libs/blockcountry-settings.php:1835
 msgid "Services"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1821
+#: libs/blockcountry-settings.php:1836
 msgid "Tools"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1822
+#: libs/blockcountry-settings.php:1837
 msgid "Logging"
 msgstr ""
 
-#: libs/blockcountry-settings.php:1823
+#: libs/blockcountry-settings.php:1838
 msgid "Import/Export"
 msgstr ""
 

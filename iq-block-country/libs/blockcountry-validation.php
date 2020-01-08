@@ -1,4 +1,8 @@
 <?php
+// Exit if accessed directly.
+if (!defined('ABSPATH')) {
+	exit;
+}
 
 /*
  * Check of an IP address is a valid IPv4 address

@@ -1,6 +1,13 @@
 ## Changes
+1.2.7.1
+* Bugfix: Undefined variable could occur in some cases.
+* Change: Updated download URL of GeoIP2 database.
+* New: Added option to set MaxMind license key in order to be able to download GeoIP2 database.
+* Info: Based on iQ Block Country 1.2.7. All other changes in that version where not applicable or already fixed.
+
 1.2.6.2
 * New: Added option to manually update the GeoIP2 database.
+* Change: Typo in San Francisco
 
 1.2.6.1
 * New: Added automatic update of GeoIP2 database.
