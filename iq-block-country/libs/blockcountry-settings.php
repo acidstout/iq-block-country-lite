@@ -4,8 +4,6 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-define('GZIPPEDGEOIP2DB', PLUGINPATH . DIRECTORY_SEPARATOR . 'db' . DIRECTORY_SEPARATOR. basename(GEOIP2DB));
-
 // Check if MaxMind license key has been set, if not so display notification.
 global $maxmind_license_key;
 if (empty($maxmind_license_key) || $maxmind_license_key === false) {
@@ -46,8 +44,8 @@ function iqblockcountry_update_GeoIP2DB($updateRequired = false) {
 		if ($iqfiledate < $iq3months || $updateRequired !== false) {
 			// GeoLite IP database is too old.
 			$updateRequired = true;
-			if (is_file(GZIPPEDGEOIP2DB)) {
-				unlink(GZIPPEDGEOIP2DB);
+			if (is_file(GEOIP2DBFILE_GZIPPED)) {
+				unlink(GEOIP2DBFILE_GZIPPED);
 			}
 		}
 	} else {
@@ -58,8 +56,8 @@ function iqblockcountry_update_GeoIP2DB($updateRequired = false) {
 	// Update of GeoLite IP database is required.
 	if ($updateRequired) {
 		// If gz-archive exists, delete it to download the latest version.
-		if (is_file(GZIPPEDGEOIP2DB)) {
-			if (!unlink(GZIPPEDGEOIP2DB)) {
+		if (is_file(GEOIP2DBFILE_GZIPPED)) {
+			if (!unlink(GEOIP2DBFILE_GZIPPED)) {
 				error_log('Could not delete gzipped GeoLite IP database. Maybe permission error?');
 				return false;
 			}
@@ -91,6 +89,7 @@ function iqblockcountry_update_GeoIP2DB($updateRequired = false) {
  */
 function DownloadGeoIP2DBfile() {
 	$ch = curl_init(GEOIP2DB);
+	$curl_response_code = -1;
 	
 	// Clear PHP's folder/file status cache.
 	clearstatcache();
@@ -103,22 +102,26 @@ function DownloadGeoIP2DBfile() {
 		}
 
 		// Open destination file for writing binary.
-		$fp = fopen(GZIPPEDGEOIP2DB, 'wb');
-		
-		// Download file and write it to destination file.
-		curl_setopt($ch, CURLOPT_FILE, $fp);
-		curl_setopt($ch, CURLOPT_HEADER, 0);
-		if (curl_exec($ch) !== false) {
-			$curl_response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-			error_log('HTTP response code: ' . $curl_response_code);
-		} else {
-			// Custom code to define server is unavailable.
-			$curl_response_code = -1;
+		try {
+			$fp = fopen(GEOIP2DBFILE_GZIPPED, 'wb');
+			
+			// Download file and write it to destination file.
+			curl_setopt($ch, CURLOPT_FILE, $fp);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			if (curl_exec($ch) !== false) {
+				$curl_response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+				error_log('HTTP response code: ' . $curl_response_code);
+			} else {
+				// Custom code to define server is unavailable.
+				$curl_response_code = -1;
+			}
+			curl_close($ch);
+			
+			// Close destination file.
+			fclose($fp);
+		} catch (Exception $e) {
+			error_log($e->getMessage());
 		}
-		curl_close($ch);
-		
-		// Close destination file.
-		fclose($fp);
 		
 		return $curl_response_code;
 	}
@@ -135,8 +138,8 @@ function DownloadGeoIP2DBfile() {
  */
 function UnpackGeoIP2DBfile() {
 	// Unzip downloaded file.
-	if (is_file(GZIPPEDGEOIP2DB)) {
-		$archive = new PharData(GZIPPEDGEOIP2DB);
+	if (is_file(GEOIP2DBFILE_GZIPPED)) {
+		$archive = new PharData(GEOIP2DBFILE_GZIPPED);
 		foreach($archive as $file) {
 			$list = scandir($file);
 			foreach ($list as $entry) {
@@ -160,7 +163,7 @@ function UnpackGeoIP2DBfile() {
 					fclose($fr);
 					
 					// Delete gz-file.
-					unlink(GZIPPEDGEOIP2DB);
+					unlink(GEOIP2DBFILE_GZIPPED);
 					
 					return true;
 				}
@@ -169,7 +172,7 @@ function UnpackGeoIP2DBfile() {
 		
 		// Another way unpacking a gzip-archive.		
 		/*
-		$in_file = gzopen(GZIPPEDGEOIP2DB, 'rb');
+		$in_file = gzopen(GEOIP2DBFILE_GZIPPED, 'rb');
 		$out_file = fopen(GEOIP2DBFILE, 'wb');
 		 
 		// Keep repeating until the end of the input file

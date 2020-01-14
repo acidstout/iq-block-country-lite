@@ -1,4 +1,7 @@
 ## Changes
+1.2.7.2
+* Bugfix: Set proper path to database file.
+
 1.2.7.1
 * Bugfix: Undefined variable could occur in some cases.
 * Change: Updated download URL of GeoIP2 database.
