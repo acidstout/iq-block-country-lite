@@ -2,8 +2,8 @@
 Contributors: iqpascal, nrekow
 Tags: spam, block, country, comments, ban, geo, geo blocking, geo ip, block country, block countries, ban countries, ban country, blacklist, whitelist, security
 Requires at least: 3.5.2
-Tested up to: 5.2.2
-Stable tag: 1.2.7.2
+Tested up to: 5.4.1
+Stable tag: 1.2.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 5.6
@@ -13,7 +13,7 @@ Allow or disallow visitors from certain countries accessing (parts of) your webs
 
 == Description ==
 
-iQ Block Country is a plugin that allows you to limit access to your website content. You can either allow or disallow visitors from defined countries to (parts of) your content.
+This plugin allows you to limit access to your website content. You can either allow or disallow visitors from defined countries to (parts of) your content.
 
 For instance if you have content that should be restricted to a limited set of countries you can do so.
 If you want to block rogue countries that cause issues like for instance hack attempts, spamming of your comments etc you can block them as well.

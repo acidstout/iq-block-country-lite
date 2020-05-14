@@ -1,4 +1,7 @@
 ## Changes
+1.2.8.1
+* Bugfix: Checking the IP address on the tools tab gave wrong information about countries being blocked if the "block countries below" function was used. This had no effect on the actual denying of visitors.
+
 1.2.7.2
 * Bugfix: Set proper path to database file.
 

@@ -473,7 +473,7 @@ function iqblockcountry_settings_tools() {
 							
 							$inverse = get_option( 'blockcountry_banlist_inverse');
 							
-							if ($inverse) {
+							if ($inverse == 'on') {
 								if (is_array($haystack) && !in_array ($country, $haystack )) {
 									$ipcheck_result .= __('This country is not permitted to visit the frontend of this website.', 'iq-block-country');
 									$ipcheck_result .= '<br/>';
@@ -492,7 +492,7 @@ function iqblockcountry_settings_tools() {
 								$haystack = array();
 							}
 							
-							if ($inverse) {
+							if ($inverse == 'on') {
 								if (is_array($haystack) && !in_array ( $country, $haystack )) {
 									$ipcheck_result .= __('This country is not permitted to visit the backend of this website.', 'iq-block-country');
 									$ipcheck_result .= '<br/>';
