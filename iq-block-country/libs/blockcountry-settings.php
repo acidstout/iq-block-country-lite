@@ -453,7 +453,7 @@ function iqblockcountry_settings_tools() {
 		switch ($iqaction) {
 			// IP check
 			case 'ipcheck':
-				if (isset($_POST['ipaddress']) && !empty($_POST['ipaddress'])) {
+				if (isset($_POST['ipaddress']) && !empty($_POST['ipaddress']) && filter_var($_POST['ipaddress'], FILTER_VALIDATE_IP)) {
 					$ip_address = sanitize_text_field($_POST['ipaddress']);
 					
 					if (iqblockcountry_is_valid_ipv4($ip_address) || iqblockcountry_is_valid_ipv6($ip_address)) {
