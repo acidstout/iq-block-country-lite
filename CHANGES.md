@@ -1,9 +1,17 @@
 ## Changes
+1.2.9.2
+* New: Selectively hide non-usable tabs. E.g. if your website does not have pages or categories or tags, the respective tabs will not be shown on the settings screen as changes would not have any effect.
+* Info: Tested with WordPress 5.5
+
 1.2.9.1
 * Change: Added additional check of user-provided ip-addresses.
 
+1.2.9
+* Change: Some codefixes applied. Whatever Pascal tries to say.
+
 1.2.8.1
 * Bugfix: Checking the IP address on the tools tab gave wrong information about countries being blocked if the "block countries below" function was used. This had no effect on the actual denying of visitors.
+* Info: Based on iQ Block Country 1.2.8. All other changes in that version where not applicable or already fixed.
 
 1.2.7.2
 * Bugfix: Set proper path to database file.
@@ -11,8 +19,13 @@
 1.2.7.1
 * Bugfix: Undefined variable could occur in some cases.
 * Change: Updated download URL of GeoIP2 database.
-* New: Added option to set MaxMind license key in order to be able to download GeoIP2 database.
+* New: Added option to set MaxMind license key in order to be able to download GeoIP2 database automatically.
 * Info: Based on iQ Block Country 1.2.7. All other changes in that version where not applicable or already fixed.
+
+1.2.7
+* New: Added France as GeoIP location
+* Change: Update to text description due to MaxMind update to Geo2Lite database policy
+* Bugfix: No empty location anymore (Thanks to Stonehenge Creations)
 
 1.2.6.2
 * New: Added option to manually update the GeoIP2 database.
@@ -20,6 +33,8 @@
 
 1.2.6.1
 * New: Added automatic update of GeoIP2 database.
+
+1.2.6
 * Change: Added better support to detect if mbstring is available for usage.
 
 1.2.5.1
@@ -27,11 +42,19 @@
 * New: Added option to unblock feed pages on the frontend configuration tab. Useful to block visitors while still allowing access to the RSS-feed.
 * Bugfix: Do no longer log empty URL queries.
 
+1.2.5
+* New: Mediapartners-Google service added
+* Change: Changed webserver ip detection a bit
+* New: You can unblock feed pages on the frontend configuration tab for the people who want to block visitors but want to allow access to the (RSS) feeds
+
 1.2.4.2
 * Bugfix: Removed static reference to `wp-includes` folder. WordPress uses the `WPINC` constant to specify this folder, and thus the folder name can be overwritten in the `wp-config.php` file.
 
 1.2.4.1
 * Change: Improved server IP address detection on Windows IIS machines.
+
+1.2.4
+* Change: Changed webserver ip detection a bit
 
 1.2.3.1
 * Bugfix: Several bugs have been fixed (e.g. missing HTML close-tags, undefined indexes, redundant clauses and loops, ...). Too much to list them all.

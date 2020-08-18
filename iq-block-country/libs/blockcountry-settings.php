@@ -1540,14 +1540,33 @@ function iqblockcountry_settings_page() {
 		$active_tab = 'home';
 	}
 	
+	// Get pages, categories and tags in order to selectively hide the tabs if they are empty.
+	$pages = get_pages();
+	$categories = get_categories(array("hide_empty"=>0));
+	$tags = get_tags(array('hide_empty' => 0));
+	
+	// Fallback to "home" tab if user tried to access a non-usable settings page.
+	if ( ($active_tab === 'pages' && empty($pages)) || ($active_tab === 'categories' && empty($categories)) || ($active_tab === 'tags' && empty($tags)) ) {
+		$active_tab = 'home';
+	}
+	
 	?><h2 class="nav-tab-wrapper">
-		<a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=home" class="nav-tab <?php echo $active_tab == 'home' ? 'nav-tab-active' : ''; ?>"><?php _e('Home', 'iq-block-country'); ?></a>  
-		<a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=frontend" class="nav-tab <?php echo $active_tab == 'frontend' ? 'nav-tab-active' : ''; ?>"><?php _e('Frontend', 'iq-block-country'); ?></a>  
-		<a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=backend" class="nav-tab <?php echo $active_tab == 'backend' ? 'nav-tab-active' : ''; ?>"><?php _e('Backend', 'iq-block-country'); ?></a>  
-		<a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=pages" class="nav-tab <?php echo $active_tab == 'pages' ? 'nav-tab-active' : ''; ?>"><?php _e('Pages', 'iq-block-country'); ?></a>  
-		<a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=categories" class="nav-tab <?php echo $active_tab == 'categories' ? 'nav-tab-active' : ''; ?>"><?php _e('Categories', 'iq-block-country'); ?></a>  
-		<a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=tags" class="nav-tab <?php echo $active_tab == 'tags' ? 'nav-tab-active' : ''; ?>"><?php _e('Tags', 'iq-block-country'); ?></a>
-		<a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=posttypes" class="nav-tab <?php echo $active_tab == 'posttypes' ? 'nav-tab-active' : ''; ?>"><?php _e('Post types', 'iq-block-country'); ?></a>
+		<a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=home" class="nav-tab <?php echo $active_tab == 'home' ? 'nav-tab-active' : ''; ?>"><?php _e('Home', 'iq-block-country'); ?></a>
+		<a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=frontend" class="nav-tab <?php echo $active_tab == 'frontend' ? 'nav-tab-active' : ''; ?>"><?php _e('Frontend', 'iq-block-country'); ?></a>
+		<a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=backend" class="nav-tab <?php echo $active_tab == 'backend' ? 'nav-tab-active' : ''; ?>"><?php _e('Backend', 'iq-block-country'); ?></a><?php
+		if (!empty($pages)) {
+			?><a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=pages" class="nav-tab <?php echo $active_tab == 'pages' ? 'nav-tab-active' : ''; ?>"><?php _e('Pages', 'iq-block-country'); ?></a><?php 
+		}
+		
+		if (!empty($categories)) {
+			?><a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=categories" class="nav-tab <?php echo $active_tab == 'categories' ? 'nav-tab-active' : ''; ?>"><?php _e('Categories', 'iq-block-country'); ?></a><?php 
+		}
+		
+		if (!empty($tags)) {
+			?><a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=tags" class="nav-tab <?php echo $active_tab == 'tags' ? 'nav-tab-active' : ''; ?>"><?php _e('Tags', 'iq-block-country'); ?></a><?php 
+		}
+		
+		?><a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=posttypes" class="nav-tab <?php echo $active_tab == 'posttypes' ? 'nav-tab-active' : ''; ?>"><?php _e('Post types', 'iq-block-country'); ?></a>
 		<a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=services" class="nav-tab <?php echo $active_tab == 'services' ? 'nav-tab-active' : ''; ?>"><?php _e('Services', 'iq-block-country'); ?></a>  
 		<a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=tools" class="nav-tab <?php echo $active_tab == 'tools' ? 'nav-tab-active' : ''; ?>"><?php _e('Tools', 'iq-block-country'); ?></a>  
 		<a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=logging" class="nav-tab <?php echo $active_tab == 'logging' ? 'nav-tab-active' : ''; ?>"><?php _e('Logging', 'iq-block-country'); ?></a>  

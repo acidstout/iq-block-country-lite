@@ -19,7 +19,7 @@ Stop visitors from doing harmful things on your WordPress site or limit the coun
 This plugin uses the GeoLite database from Maxmind. It has a 99.5% accuracy so that is pretty good for a free database. If you need higher accuracy you can buy a license from MaxMind directly.
 
 ## GDPR information
-This plugin stores data about your visitors in your local WordPress database. The number of days this data is stores can be configured on the settings page. You can also disable logging any data.
+This plugin stores data about your visitors in your local WordPress database. The number of days this data is stored can be configured on the settings page. You can also disable data logging.
 
 Data which is stored of blocked visitors:
 
