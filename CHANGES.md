@@ -1,4 +1,9 @@
 ## Changes
+1.2.10
+* Change: Changed whitelist/blacklist to allow list / block list. <-- This is insane. The whole discussion about racism is useless. Just stop discussing and be nice to each other. But don't rname whitelist/blacklist because some degenrated fuck claims it's racist. Because it's not. If you think it's racist, then you are the racist.
+* Change: Removed Paris as GeoIP location <-- Where? I couldn't find it in the code.
+* Change: Added website server address to allow list of the backend to ensure certain WordPress functions keep working if you block the country your website is hosted from the backend. <-- Yes, this is actually useful, although the separate variable is not necessarry. Anyway, people are stupid and they will likely break this, too.
+
 1.2.9.2
 * New: Selectively hide non-usable tabs. E.g. if your website does not have pages or categories or tags, the respective tabs will not be shown on the settings screen as changes would not have any effect.
 * Info: Tested with WordPress 5.5

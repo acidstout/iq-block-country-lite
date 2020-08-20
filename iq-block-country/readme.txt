@@ -1,9 +1,9 @@
 === iQ Block Country Lite ===
 Contributors: iqpascal, nrekow
-Tags: spam, block, country, comments, ban, geo, geo blocking, geo ip, block country, block countries, ban countries, ban country, blacklist, whitelist, security
+Tags: spam, block, country, comments, ban, geo, geo blocking, geo ip, block country, block countries, ban countries, ban country, allow list, block list, security
 Requires at least: 3.5.2
 Tested up to: 5.5
-Stable tag: 1.2.9.2
+Stable tag: 1.2.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 5.6
@@ -20,7 +20,7 @@ If you want to block rogue countries that cause issues like for instance hack at
 
 Do you want secure your WordPress Admin backend site to only your country? Entirely possible! You can even block all countries and only allow your ip address.
 
-And even if you block a country you can still allow certain visitors by whitelisting their ip address just like you can allow a country but blacklist ip addresses from that country.
+And even if you block a country you can still allow certain visitors by putting their ip address just like you can allow a country but put ip addresses from that country on a blocklist.
 
 You can show blocked visitors a message which you can style by using CSS or you can redirect them to a page within your WordPress site. Or you can redirect the visitors to an external website.
 

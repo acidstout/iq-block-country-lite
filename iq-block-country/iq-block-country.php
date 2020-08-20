@@ -2,7 +2,7 @@
 /**
  * Plugin Name: iQ Block Country Lite
  * Plugin URI: https://rekow.ch
- * Version: 1.2.9.2
+ * Version: 1.2.10
  * Author: Nils Rekow
  * Author URI: https://rekow.ch
  * Description: Block visitors from visiting your website and backend website based on which country their IP address is from. The Maxmind GeoIP lite database is used for looking up from which country an ip address is from.
@@ -16,7 +16,7 @@
  */
 
 /**
- * Copyright 2010-2019  Pascal  (email: pascal@webence.nl)
+ * Copyright 2010-2020  Pascal  (email: pascal@webence.nl)
  * Copyright 2019-2020  Nils Rekow
  * 
  * This program is free software; you can redistribute it and/or modify
@@ -61,7 +61,7 @@ define('GEOIP2DBFILE_GZIPPED', PLUGINPATH . DIRECTORY_SEPARATOR . 'db' . DIRECTO
 define('GEOIP2DBFILE', PLUGINPATH . DIRECTORY_SEPARATOR . 'db' . DIRECTORY_SEPARATOR. 'GeoLite2-Country.mmdb');
 
 define('DBVERSION', '122');
-define('VERSION', '1.2.8');
+define('VERSION', '1.2.10');
 
 
 /*
@@ -121,7 +121,7 @@ iqblockcountry_update_GeoIP2DB();
  * Clean logging database
  */
 iqblockcountry_clean_db();
-iqblockcountry_get_blackwhitelist();
+iqblockcountry_get_blockallowlist();
 
 
 /*

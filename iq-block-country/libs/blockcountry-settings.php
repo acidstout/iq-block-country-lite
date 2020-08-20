@@ -359,6 +359,14 @@ function iqblockcountry_set_defaults() {
 	if (get_option('blockcountry_nrstatistics')				=== false) { update_option('blockcountry_nrstatistics', 15); }
 	if (get_option('blockcountry_daysstatistics', null)		=== null ) { update_option('blockcountry_daysstatistics', 30); }
 	if (get_option('blockcountry_backendwhitelist')			=== false || (get_option('blockcountry_backendwhitelist') == "")) { update_option('blockcountry_backendwhitelist', $ip_address); }
+	
+	// Add server where WP is running to backend whitelist.
+	$tmpbackendallowlist = get_option('blockcountry_backendwhitelist');
+	if (strpos($tmpbackendallowlist, $server_addr) === false) {
+		$tmpbackendallowlist .= $server_addr . ";";
+		update_option('blockcountry_backendwhitelist', $tmpbackendallowlist);
+	}
+	
 	if (get_option('blockcountry_frontendwhitelist')		=== false || (get_option('blockcountry_frontendwhitelist') == "")) { update_option('blockcountry_frontendwhitelist', $server_addr); }
 	if (get_option('blockcountry_banlist_inverse')			=== false) { update_option('blockcountry_banlist_inverse' , 'off'); }
 	if (get_option('blockcountry_backendbanlist_inverse')	=== false) { update_option('blockcountry_backendbanlist_inverse' , 'off'); }
@@ -423,18 +431,18 @@ function iqblockcountry_uninstall() {
 
 
 function iqblockcountry_settings_tools() {
-	global $feblacklistip,
-		$feblacklistiprange4,
-		$feblacklistiprange6,
-		$fewhitelistip,
-		$fewhitelistiprange4,
-		$fewhitelistiprange6,
+	global $feblocklistip,
+		$feblocklistiprange4,
+		$feblocklistiprange6,
+		$feallowlistip,
+		$feallowlistiprange4,
+		$feallowlistiprange6,
 		$beblacklistip,
 		$beblacklistiprange4,
 		$beblacklistiprange6,
-		$bewhitelistip,
-		$bewhitelistiprange4,
-		$bewhitelistiprange6;
+		$beallowlistip,
+		$beallowlistiprange4,
+		$beallowlistiprange6;
 	
 	global $maxmind_license_key;
 	
@@ -511,12 +519,12 @@ function iqblockcountry_settings_tools() {
 							}
 						}
 						
-						if (iqblockcountry_validate_ip_in_list($ip_address,$feblacklistiprange4,$feblacklistiprange6,$feblacklistip)) {
+						if (iqblockcountry_validate_ip_in_list($ip_address,$feblocklistiprange4,$feblocklistiprange6,$feblocklistip)) {
 							$ipcheck_result .= __('This IP address is present in the frontend blacklist.', 'iq-block-country');
 							$ipcheck_result .= '<br/>';
 						}
 						
-						if (iqblockcountry_validate_ip_in_list($ip_address,$fewhitelistiprange4,$fewhitelistiprange6,$fewhitelistip)) {
+						if (iqblockcountry_validate_ip_in_list($ip_address,$feallowlistiprange4,$feallowlistiprange6,$feallowlistip)) {
 							$ipcheck_result .= __('This IP address is present in the frontend whitelist.', 'iq-block-country');
 							$ipcheck_result .= '<br/>';
 						}
@@ -526,7 +534,7 @@ function iqblockcountry_settings_tools() {
 							$ipcheck_result .= '<br/>';
 						}
 						
-						if (iqblockcountry_validate_ip_in_list($ip_address,$bewhitelistiprange4,$bewhitelistiprange6,$beblacklistip)) {
+						if (iqblockcountry_validate_ip_in_list($ip_address,$beallowlistiprange4,$beallowlistiprange6,$beblacklistip)) {
 							$ipcheck_result .= __('This IP address is present in the backend whitelist.', 'iq-block-country');
 							$ipcheck_result .= '<br/>';
 						}
@@ -986,8 +994,8 @@ function iqblockcountry_settings_frontend() {
 	
 	?><h3><?php _e('Frontend options', 'iq-block-country'); ?></h3><?php
 	$countrylist = iqblockcountry_get_isocountries();
-	$frontendwhitelist = get_option('blockcountry_frontendwhitelist');
-	$frontendblacklist = get_option('blockcountry_frontendblacklist');
+	$frontendallowlist = get_option('blockcountry_frontendwhitelist');
+	$frontendblocklist = get_option('blockcountry_frontendblacklist');
 		
 	?><link rel="stylesheet" href="<?php echo CHOSENCSS;?>" type="text/css" />
 	<form method="post" action="options.php">
@@ -1064,12 +1072,12 @@ function iqblockcountry_settings_frontend() {
 				<td width="70%"><input type="checkbox" name="blockcountry_blockfeed" <?php checked('on', get_option('blockcountry_blockfeed'), true);?>/></td>
 			</tr>
 			<tr valign="top">
-				<th width="30%"><?php _e('Frontend whitelist IPv4 and/or IPv6 addresses:', 'iq-block-country');?><br/><?php _e('Use a semicolon (;) to separate IP addresses', 'iq-block-country'); ?><br /><?php _e('This field accepts single IP addresses as well as ranges in CIDR format.', 'iq-block-country');?></th>
-				<td width="70%"><textarea cols="70" rows="5" name="blockcountry_frontendwhitelist"><?php echo $frontendwhitelist;?></textarea></td>
+				<th width="30%"><?php _e('Frontend allowlist IPv4 and/or IPv6 addresses:', 'iq-block-country');?><br/><?php _e('Use a semicolon (;) to separate IP addresses', 'iq-block-country'); ?><br /><?php _e('This field accepts single IP addresses as well as ranges in CIDR format.', 'iq-block-country');?></th>
+				<td width="70%"><textarea cols="70" rows="5" name="blockcountry_frontendwhitelist"><?php echo $frontendallowlist;?></textarea></td>
 			</tr>
 			<tr valign="top">
-				<th width="30%"><?php _e('Frontend blacklist IPv4 and/or IPv6 addresses:', 'iq-block-country'); ?><br /><?php _e('Use a semicolon (;) to separate IP addresses', 'iq-block-country'); ?><br /><?php _e('This field accepts single IP addresses as well as ranges in CIDR format.', 'iq-block-country');?></th>
-				<td width="70%"><textarea cols="70" rows="5" name="blockcountry_frontendblacklist"><?php echo $frontendblacklist;?></textarea></td>
+				<th width="30%"><?php _e('Frontend blocklist IPv4 and/or IPv6 addresses:', 'iq-block-country'); ?><br /><?php _e('Use a semicolon (;) to separate IP addresses', 'iq-block-country'); ?><br /><?php _e('This field accepts single IP addresses as well as ranges in CIDR format.', 'iq-block-country');?></th>
+				<td width="70%"><textarea cols="70" rows="5" name="blockcountry_frontendblacklist"><?php echo $frontendblocklist;?></textarea></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -1099,8 +1107,8 @@ function iqblockcountry_settings_backend() {
 		$displaycountry = $countrylist[$country];
 	}
 	
-	$backendwhitelist = get_option('blockcountry_backendwhitelist');
-	$backendblacklist = get_option('blockcountry_backendblacklist');
+	$backendallowlist = get_option('blockcountry_backendwhitelist');
+	$backendblocklist = get_option('blockcountry_backendblacklist');
 	
 	?><link rel="stylesheet" href=<?php echo "\"" . CHOSENCSS . "\""?> type="text/css" />
 	<form method="post" action="options.php">
@@ -1165,19 +1173,19 @@ function iqblockcountry_settings_backend() {
 			</tr>
 			<tr valign="top">
 				<th width="30%">
-					<?php _e('Backend whitelist IPv4 and/or IPv6 addresses:', 'iq-block-country');?><br/>
+					<?php _e('Backend allowlist IPv4 and/or IPv6 addresses:', 'iq-block-country');?><br/>
 					<?php _e('Use a semicolon (;) to separate IP addresses', 'iq-block-country');?><br/>
 					<?php _e('This field accepts single IP addresses as well as ranges in CIDR format.', 'iq-block-country');?>
 				</th>
-				<td width="70%"><textarea cols="70" rows="5" name="blockcountry_backendwhitelist"><?php echo $backendwhitelist;?></textarea></td>
+				<td width="70%"><textarea cols="70" rows="5" name="blockcountry_backendwhitelist"><?php echo $backendallowlist;?></textarea></td>
 			</tr>
 			<tr valign="top">
 				<th width="30%">
-					<?php _e('Backend blacklist IPv4 and/or IPv6 addresses:', 'iq-block-country');?><br/>
+					<?php _e('Backend blocklist IPv4 and/or IPv6 addresses:', 'iq-block-country');?><br/>
 					<?php _e('Use a semicolon (;) to separate IP addresses', 'iq-block-country'); ?><br/>
 					<?php _e('This field accepts single IP addresses as well as ranges in CIDR format.', 'iq-block-country');?>
 				</th>
-				<td width="70%"><textarea cols="70" rows="5" name="blockcountry_backendblacklist"><?php echo $backendblacklist;?></textarea></td>
+				<td width="70%"><textarea cols="70" rows="5" name="blockcountry_backendblacklist"><?php echo $backendblocklist;?></textarea></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -1619,77 +1627,77 @@ function iqblockcountry_settings_page() {
 /*
  * Get different lists of black and whitelist
  */
-function iqblockcountry_get_blackwhitelist() {
-	$frontendblacklist = get_option ( 'blockcountry_frontendblacklist' );
-	$frontendwhitelist = get_option ( 'blockcountry_frontendwhitelist' );
-	$backendblacklist = get_option ( 'blockcountry_backendblacklist' );
-	$backendwhitelist = get_option ( 'blockcountry_backendwhitelist' );
+function iqblockcountry_get_blockallowlist() {
+	$frontendblocklist = get_option ( 'blockcountry_frontendblacklist' );
+	$frontendallowlist = get_option ( 'blockcountry_frontendwhitelist' );
+	$backendblocklist = get_option ( 'blockcountry_backendblacklist' );
+	$backendallowlist = get_option ( 'blockcountry_backendwhitelist' );
 	
-	$frontendblacklistip = array();
-	$frontendwhitelistip = array();
-	$backendblacklistip = array();
-	$backendwhitelistip = array();
+	$frontendblocklistip = array();
+	$frontendallowlistip = array();
+	$backendblocklistip = array();
+	$backendallowlistip = array();
 	
-	$feblacklistip = array();
-	$feblacklistiprange4 = array();
-	$feblacklistiprange6 = array();
-	$fewhitelistip = array();
-	$fewhitelistiprange4 = array();
-	$fewhitelistiprange6 = array();
+	$feblocklistip = array();
+	$feblocklistiprange4 = array();
+	$feblocklistiprange6 = array();
+	$feallowlistip = array();
+	$feallowlistiprange4 = array();
+	$feallowlistiprange6 = array();
 	
 	$beblacklistip = array();
 	$beblacklistiprange4 = array();
 	$beblacklistiprange6 = array();
-	$bewhitelistip = array();
-	$bewhitelistiprange4 = array();
-	$bewhitelistiprange6 = array();
+	$beallowlistip = array();
+	$beallowlistiprange4 = array();
+	$beallowlistiprange6 = array();
 	
-	global $feblacklistip,
-		$feblacklistiprange4,
-		$feblacklistiprange6,
-		$fewhitelistip,
-		$fewhitelistiprange4,
-		$fewhitelistiprange6,
+	global $feblocklistip,
+		$feblocklistiprange4,
+		$feblocklistiprange6,
+		$feallowlistip,
+		$feallowlistiprange4,
+		$feallowlistiprange6,
 		$beblacklistip,
 		$beblacklistiprange4,
 		$beblacklistiprange6,
-		$bewhitelistip,
-		$bewhitelistiprange4,
-		$bewhitelistiprange6;
+		$beallowlistip,
+		$beallowlistiprange4,
+		$beallowlistiprange6;
 	
 	
-	if (preg_match('/;/',$frontendblacklist)) {
-		$frontendblacklistip = explode(";", $frontendblacklist);
+	if (preg_match('/;/',$frontendblocklist)) {
+		$frontendblocklistip = explode(";", $frontendblocklist);
 		
-		foreach ($frontendblacklistip AS $ip) {
+		foreach ($frontendblocklistip AS $ip) {
 			if (iqblockcountry_is_valid_ipv4($ip) || iqblockcountry_is_valid_ipv6($ip)) {
-				$feblacklistip[] = $ip;
+				$feblocklistip[] = $ip;
 			} elseif (iqblockcountry_is_valid_ipv4_cidr($ip)) {
-				$feblacklistiprange4[] = $ip;
+				$feblocklistiprange4[] = $ip;
 			} elseif (iqblockcountry_is_valid_ipv6_cidr($ip)) {
-				$feblacklistiprange6[] = $ip;
+				$feblocklistiprange6[] = $ip;
 			}
 		}
 	}
 	
-	if (preg_match('/;/',$frontendwhitelist)) {
-		$frontendwhitelistip = explode(";", $frontendwhitelist);
+	if (preg_match('/;/',$frontendallowlist)) {
+		$frontendallowlistip = explode(";", $frontendallowlist);
 		
-		foreach ($frontendwhitelistip AS $ip) {
+		foreach ($frontendallowlistip AS $ip) {
 			if (iqblockcountry_is_valid_ipv4($ip) || iqblockcountry_is_valid_ipv6($ip)) {
-				$fewhitelistip[] = $ip;
+				$feallowlistip[] = $ip;
 			} elseif (iqblockcountry_is_valid_ipv4_cidr($ip)) {
-				$fewhitelistiprange4[] = $ip;
+				$feallowlistiprange4[] = $ip;
 			} elseif (iqblockcountry_is_valid_ipv6_cidr($ip)) {
-				$fewhitelistiprange6[] = $ip;
+				$feallowlistiprange6[] = $ip;
 			}
 		}
 	}
 	
-	if (preg_match('/;/',$backendblacklist)) {
-		$backendblacklistip = explode(";", $backendblacklist);
+	if (preg_match('/;/',$backendblocklist)) {
+		$backendblocklistip = explode(";", $backendblocklist);
 		
-		foreach ($backendblacklistip AS $ip) {
+		foreach ($backendblocklistip AS $ip) {
 			if (iqblockcountry_is_valid_ipv4($ip) || iqblockcountry_is_valid_ipv6($ip)) {
 				$beblacklistip[] = $ip;
 			} elseif (iqblockcountry_is_valid_ipv4_cidr($ip)) {
@@ -1700,16 +1708,16 @@ function iqblockcountry_get_blackwhitelist() {
 		}
 	}
 	
-	if (preg_match('/;/',$backendwhitelist)) {
-		$backendwhitelistip = explode(";", $backendwhitelist);
+	if (preg_match('/;/',$backendallowlist)) {
+		$backendallowlistip = explode(";", $backendallowlist);
 		
-		foreach ($backendwhitelistip AS $ip) {
+		foreach ($backendallowlistip AS $ip) {
 			if (iqblockcountry_is_valid_ipv4($ip) || iqblockcountry_is_valid_ipv6($ip)) {
-				$bewhitelistip[] = $ip;
+				$beallowlistip[] = $ip;
 			} elseif (iqblockcountry_is_valid_ipv4_cidr($ip)) {
-				$bewhitelistiprange4[] = $ip;
+				$beallowlistiprange4[] = $ip;
 			} elseif (iqblockcountry_is_valid_ipv6_cidr($ip)) {
-				$bewhitelistiprange6[] = $ip;
+				$beallowlistiprange6[] = $ip;
 			}
 		}
 	}

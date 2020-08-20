@@ -36,7 +36,7 @@ function iqblockcountry_check_ipaddress($ip_address) {
 
 
 /*
- *  Check country against bad countries, whitelist and blacklist
+ *  Check country against bad countries, allowlist and blocklist
  */
 function iqblockcountry_check($country, $badcountries, $ip_address) {
 	/* Set default blocked status and get all options */
@@ -68,19 +68,19 @@ function iqblockcountry_check($country, $badcountries, $ip_address) {
 	$blockedfeed = get_option('blockcountry_blockfeed');
 	$postid = get_the_ID();
 
-	global $feblacklistip,
-		$feblacklistiprange4,
-		$feblacklistiprange6,
-		$fewhitelistip,
-		$fewhitelistiprange4,
-		$fewhitelistiprange6;
+	global $feblocklistip,
+		$feblocklistiprange4,
+		$feblocklistiprange6,
+		$feallowlistip,
+		$feallowlistiprange4,
+		$feallowlistiprange6;
 	
-	global $beblacklistip,
-		$beblacklistiprange4,
-		$beblacklistiprange6,
-		$bewhitelistip,
-		$bewhitelistiprange4,
-		$bewhitelistiprange6;
+	global $beblocklistip,
+		$beblocklistiprange4,
+		$beblocklistiprange6,
+		$beallowlistip,
+		$beallowlistiprange4,
+		$beallowlistiprange6;
 	
 	$backendbanlistip = unserialize(get_option('blockcountry_backendbanlistip'));
 	$blockredirect = get_option ( 'blockcountry_redirect');
@@ -98,11 +98,11 @@ function iqblockcountry_check($country, $badcountries, $ip_address) {
 
 	/* Check if requested url is not login page. Else check against frontend whitelist/blacklist. */
 	if (!($blockcountry_is_login_page) && !(is_admin()) && !($blockcountry_is_xmlrpc)) {
-		if (iqblockcountry_validate_ip_in_list($ip_address, $feblacklistiprange4, $feblacklistiprange6, $feblacklistip)) {
+		if (iqblockcountry_validate_ip_in_list($ip_address, $feblocklistiprange4, $feblocklistiprange6, $feblocklistip)) {
 			 $blocked = true;
 		}
 		
-		if (iqblockcountry_validate_ip_in_list($ip_address, $fewhitelistiprange4, $fewhitelistiprange6, $fewhitelistip)) {
+		if (iqblockcountry_validate_ip_in_list($ip_address, $feallowlistiprange4, $feallowlistiprange6, $feallowlistip)) {
 			$blocked = FALSE;
 		}
 	}
@@ -115,11 +115,11 @@ function iqblockcountry_check($country, $badcountries, $ip_address) {
 			$apiblacklist = true;
 		}
 		
-		if (iqblockcountry_validate_ip_in_list($ip_address, $beblacklistiprange4, $beblacklistiprange6, $beblacklistip)) {
+		if (iqblockcountry_validate_ip_in_list($ip_address, $beblocklistiprange4, $beblocklistiprange6, $beblocklistip)) {
 			 $blocked = true;
 		}
 		
-		if (iqblockcountry_validate_ip_in_list($ip_address, $bewhitelistiprange4, $bewhitelistiprange6, $bewhitelistip)) {
+		if (iqblockcountry_validate_ip_in_list($ip_address, $beallowlistiprange4, $beallowlistiprange6, $beallowlistip)) {
 			$blocked = false;
 		}
 		
@@ -131,9 +131,9 @@ function iqblockcountry_check($country, $badcountries, $ip_address) {
 	if ($blockedposttypes == 'on') {
 		$blockedposttypes = get_option('blockcountry_posttypes');
 		
-		if (is_array($blockedposttypes) && in_array(get_post_type( $postid ), $blockedposttypes) && ((is_array ( $badcountries ) && in_array ( $country, $badcountries ) || (iqblockcountry_validate_ip_in_list($ip_address, $feblacklistiprange4, $feblacklistiprange6, $feblacklistip))))) {
+		if (is_array($blockedposttypes) && in_array(get_post_type( $postid ), $blockedposttypes) && ((is_array ( $badcountries ) && in_array ( $country, $badcountries ) || (iqblockcountry_validate_ip_in_list($ip_address, $feblocklistiprange4, $feblocklistiprange6, $feblocklistip))))) {
 			$blocked = TRUE;
-			if (iqblockcountry_validate_ip_in_list($ip_address, $fewhitelistiprange4, $fewhitelistiprange6, $fewhitelistip)) {
+			if (iqblockcountry_validate_ip_in_list($ip_address, $feallowlistiprange4, $feallowlistiprange6, $feallowlistip)) {
 				$blocked = FALSE;
 			}
 		} else {
@@ -144,9 +144,9 @@ function iqblockcountry_check($country, $badcountries, $ip_address) {
 	if (is_page() && $blockedpage == 'on') {
 		$post = get_post();
 		
-		if (is_page($blockedpages) && !empty($blockedpages) && ((is_array ( $badcountries ) && in_array ( $country, $badcountries ) || (iqblockcountry_validate_ip_in_list($ip_address, $feblacklistiprange4, $feblacklistiprange6, $feblacklistip))))) {
+		if (is_page($blockedpages) && !empty($blockedpages) && ((is_array ( $badcountries ) && in_array ( $country, $badcountries ) || (iqblockcountry_validate_ip_in_list($ip_address, $feblocklistiprange4, $feblocklistiprange6, $feblocklistip))))) {
 			$blocked = TRUE;
-			if (iqblockcountry_validate_ip_in_list($ip_address, $fewhitelistiprange4, $fewhitelistiprange6, $fewhitelistip)) {
+			if (iqblockcountry_validate_ip_in_list($ip_address, $feallowlistiprange4, $feallowlistiprange6, $feallowlistip)) {
 				$blocked = FALSE;
 			}
 		} else {
@@ -166,9 +166,9 @@ function iqblockcountry_check($country, $badcountries, $ip_address) {
 		
 		foreach ($post_categories as $key => $value) {
 			if (in_array($value,$blockedcategories)) {
-				if (is_single() && ((is_array ( $badcountries ) && in_array ( $country, $badcountries ) || (iqblockcountry_validate_ip_in_list($ip_address, $feblacklistiprange4, $feblacklistiprange6, $feblacklistip))))) {
+				if (is_single() && ((is_array ( $badcountries ) && in_array ( $country, $badcountries ) || (iqblockcountry_validate_ip_in_list($ip_address, $feblocklistiprange4, $feblocklistiprange6, $feblocklistip))))) {
 					$flagged = TRUE;
-					if (iqblockcountry_validate_ip_in_list($ip_address,$fewhitelistiprange4,$fewhitelistiprange6,$fewhitelistip)) {
+					if (iqblockcountry_validate_ip_in_list($ip_address,$feallowlistiprange4,$feallowlistiprange6,$feallowlistip)) {
 						$flagged = FALSE;
 					}
 				}
@@ -199,9 +199,9 @@ function iqblockcountry_check($country, $badcountries, $ip_address) {
 		
 		foreach ($post_tags as $tag) {
 			if (in_array($tag->term_id, $blockedtags)) {
-				if (is_single() && ((is_array ( $badcountries ) && in_array ( $country, $badcountries ) || (iqblockcountry_validate_ip_in_list($ip_address, $feblacklistiprange4, $feblacklistiprange6, $feblacklistip))))) {
+				if (is_single() && ((is_array ( $badcountries ) && in_array ( $country, $badcountries ) || (iqblockcountry_validate_ip_in_list($ip_address, $feblocklistiprange4, $feblocklistiprange6, $feblocklistip))))) {
 					$flagged = true;
-					if (iqblockcountry_validate_ip_in_list($ip_address, $fewhitelistiprange4, $fewhitelistiprange6, $fewhitelistip)) {
+					if (iqblockcountry_validate_ip_in_list($ip_address, $feallowlistiprange4, $feallowlistiprange6, $feallowlistip)) {
 						$flagged = false;
 					}
 				}
@@ -220,11 +220,11 @@ function iqblockcountry_check($country, $badcountries, $ip_address) {
 		$flagged = false;
 		$blockedcategories = get_option('blockcountry_categories');
 		
-		if (is_category($blockedcategories) && ((is_array ( $badcountries ) && in_array ( $country, $badcountries ) || (iqblockcountry_validate_ip_in_list($ip_address, $feblacklistiprange4, $feblacklistiprange6, $feblacklistip))))) {
+		if (is_category($blockedcategories) && ((is_array ( $badcountries ) && in_array ( $country, $badcountries ) || (iqblockcountry_validate_ip_in_list($ip_address, $feblocklistiprange4, $feblocklistiprange6, $feblocklistip))))) {
 			$flagged = true;
 		}
 		
-		if (iqblockcountry_validate_ip_in_list($ip_address, $fewhitelistiprange4, $fewhitelistiprange6, $fewhitelistip)) {
+		if (iqblockcountry_validate_ip_in_list($ip_address, $feallowlistiprange4, $feallowlistiprange6, $feallowlistip)) {
 			$flagged = false;
 		}
 		
@@ -239,11 +239,11 @@ function iqblockcountry_check($country, $badcountries, $ip_address) {
 	if (is_tag() && $blockedtag == 'on') {
 		$flagged = false;
 		
-		if ((is_array ( $badcountries ) && in_array ( $country, $badcountries ) || (iqblockcountry_validate_ip_in_list($ip_address, $feblacklistiprange4, $feblacklistiprange6, $feblacklistip)))) {
+		if ((is_array ( $badcountries ) && in_array ( $country, $badcountries ) || (iqblockcountry_validate_ip_in_list($ip_address, $feblocklistiprange4, $feblocklistiprange6, $feblocklistip)))) {
 			$flagged = true;
 		}
 		
-		if (iqblockcountry_validate_ip_in_list($ip_address, $fewhitelistiprange4, $fewhitelistiprange6, $fewhitelistip)) {
+		if (iqblockcountry_validate_ip_in_list($ip_address, $feallowlistiprange4, $feallowlistiprange6, $feallowlistip)) {
 			$flagged = false;
 		}
 		
@@ -261,11 +261,11 @@ function iqblockcountry_check($country, $badcountries, $ip_address) {
 			$blocked = false;
 		} else {
 			$flagged = false;
-			if ((is_array ( $badcountries ) && in_array ( $country, $badcountries ) || (iqblockcountry_validate_ip_in_list($ip_address, $feblacklistiprange4, $feblacklistiprange6, $feblacklistip)))) {
+			if ((is_array ( $badcountries ) && in_array ( $country, $badcountries ) || (iqblockcountry_validate_ip_in_list($ip_address, $feblocklistiprange4, $feblocklistiprange6, $feblocklistip)))) {
 				$flagged = true;
 			}
 			
-			if (iqblockcountry_validate_ip_in_list($ip_address, $fewhitelistiprange4, $fewhitelistiprange6, $fewhitelistip)) {
+			if (iqblockcountry_validate_ip_in_list($ip_address, $feallowlistiprange4, $feallowlistiprange6, $feallowlistip)) {
 				$flagged = false;
 			}
 			
@@ -324,7 +324,7 @@ function iqblockcountry_CheckCountryBackEnd() {
 	$blocklogin = get_option ( 'blockcountry_blocklogin' );
 	if ( ((is_user_logged_in()) && ($blocklogin != 'on')) || (!(is_user_logged_in())) )  {			
 
-		/* Check ip address against banlist, whitelist and blacklist */
+		/* Check ip address against banlist, allowlist and blocklist */
 		if (iqblockcountry_check($country, $badcountries, $ip_address)) {
 			if (($blockcountry_is_login_page || is_admin() || $blockcountry_is_xmlrpc) && get_option('blockcountry_blockbackend') == 'on') {
 				$blocked = get_option('blockcountry_backendnrblocks');
@@ -337,7 +337,7 @@ function iqblockcountry_CheckCountryBackEnd() {
 				
 				update_option('blockcountry_backendnrblocks', $blocked);
 				
-				global $apiblacklist, $backendblacklistcheck, $debughandled;
+				global $apiblacklist, $backendblacklistcheck;
 				
 				if (!get_option('blockcountry_logging')) {
 					if (!$apiblacklist) {
@@ -425,7 +425,7 @@ function iqblockcountry_CheckCountryFrontEnd() {
 	$blocklogin = get_option ( 'blockcountry_blocklogin' );
 	if ( ((is_user_logged_in()) && ($blocklogin != 'on')) || (!(is_user_logged_in())) )  {			
 
-		/* Check ip address against banlist, whitelist and blacklist */
+		/* Check ip address against banlist, allowlist and blocklist */
 		if (iqblockcountry_check($country, $badcountries, $ip_address)) {
 			$blocked = get_option('blockcountry_frontendnrblocks');
 			

@@ -116,8 +116,20 @@ function iqblockcountry_upgrade() {
 	$dbversion = get_option('blockcountry_version');
 	update_option('blockcountry_version', VERSION);
 
-	if ($dbversion != "" && version_compare($dbversion, "1.2.7", '<') ) {
+	if ($dbversion != "" && version_compare($dbversion, "1.2.10", '<') ) {
 		//iqblockcountry_find_geoip_location();
+		$server_addr = array_key_exists( 'SERVER_ADDR', $_SERVER ) ? $_SERVER['SERVER_ADDR'] : $_SERVER['LOCAL_ADDR'];
+		if (get_option('blockcountry_backendwhitelist') === FALSE || (get_option('blockcountry_backendwhitelist') == "")) {
+			update_option('blockcountry_backendwhitelist',$server_addr . ";");
+		} else {
+			$tmpbackendallowlist = get_option('blockcountry_backendwhitelist');
+			$ippos = strpos($tmpbackendallowlist,$server_addr);
+			if ($ippos === false)
+			{
+				$tmpbackendallowlist .= $server_addr . ";";
+				update_option('blockcountry_backendwhitelist',$tmpbackendallowlist);
+			}
+		}
 	} elseif ($dbversion != "" && version_compare($dbversion, "1.2.5", '<') ) {
 		update_option('blockcountry_blockfeed' , 'on');
 	} elseif ($dbversion != "" && version_compare($dbversion, "1.2.3", '<') ) {
