@@ -1,4 +1,9 @@
 ## Changes
+1.2.11
+* Change: Minor UI fix
+* Change: Added some more checking if the visitors IP is an actual IPv4 or IPv6 address
+* Change: Updated README
+
 1.2.10
 * Change: Changed whitelist/blacklist to allow list / block list. <-- This is insane. The whole discussion about racism is useless. Just stop discussing and be nice to each other. But don't rename whitelist/blacklist, because some degenrated fuck claims it's racist. Because it's not. If you think it's racist, then you are the racist.
 * Change: Removed Paris as GeoIP location <-- Where? I couldn't find it in the code.
