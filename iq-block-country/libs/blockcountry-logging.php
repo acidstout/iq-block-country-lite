@@ -94,7 +94,7 @@ function iqblockcountry_blockcountry_debuglogging($old_value, $new_value) {
 }
 
 
-function iqblockcountry_logging($ipaddress, $country = 'Unknown', $banned) {
+function iqblockcountry_logging($ipaddress, $country = 'Unknown', $banned = '') {
 	 global $wpdb;
 
 	 if (empty($country) || is_null($country)) {
@@ -106,12 +106,13 @@ function iqblockcountry_logging($ipaddress, $country = 'Unknown', $banned) {
 	 $table_name = $wpdb->prefix . "iqblock_logging";
 	 $result = $wpdb->insert($table_name, array ('datetime' => current_time('mysql'), 'ipaddress' => $ipaddress, 'country' => $country, 'banned' => $banned,'url' => $urlRequested));
 	 if ($result === false) {
+	    error_log(print_r($wpdb->last_error, true));
 	 	error_log(print_r($wpdb->last_query, true));
 	 }
 }
 
 
-function iqblockcountry_debug_logging($ipaddress, $country = 'Unknown', $banned) {
+function iqblockcountry_debug_logging($ipaddress, $country = 'Unknown', $banned = '') {
 	if (get_option('blockcountry_debuglogging')) {
 		global $wpdb;
 
@@ -126,6 +127,7 @@ function iqblockcountry_debug_logging($ipaddress, $country = 'Unknown', $banned)
 		$table_name = $wpdb->prefix . "iqblock_debug_logging";
 		$result = $wpdb->insert($table_name, array ('datetime' => current_time('mysql'), 'ipaddress' => $ipaddress, 'type' => $type, 'country' => $country, 'banned' => $banned,'url' => $urlRequested));
 		if ($result === false) {
+		    error_log(print_r($wpdb->last_error, true));
 			error_log(print_r($wpdb->last_query, true));
 		}
 	}

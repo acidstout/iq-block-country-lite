@@ -1,4 +1,7 @@
 ## Changes
+1.2.11.1
+* Change: Added PHP 8 compatibility.
+
 1.2.11
 * Change: Minor UI fix
 * Change: Added some more checking if the visitors IP is an actual IPv4 or IPv6 address
