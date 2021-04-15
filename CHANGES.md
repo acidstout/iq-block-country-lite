@@ -1,4 +1,8 @@
 ## Changes
+1.2.11.3
+* Change: Always override a Maxmind license key in the DB with the one from wp-config.php if defined.
+* Security fix: Properly disable update of the license key field and show a dummy license key if a license key has been defined in wp-config.php.
+
 1.2.11.2
 * Bugfix: Fixed link to "Reading" settings on "Services" tab.
 * Change: Removed bold fonts in order to impürove readability.

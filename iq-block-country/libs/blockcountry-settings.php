@@ -603,10 +603,20 @@ function iqblockcountry_settings_tools() {
 		<br/><?php 
 	}
 
+	// Disable update button if no license key has been set.
 	$update_button_disabled = '';
 	if (empty($maxmind_license_key) || $maxmind_license_key === false) {
 		$update_button_disabled = 'disabled';
 	}
+
+	// Disable Maxmind license field and save button if a license key has been defined in wp-config.php.
+	$disable_license_field = '';
+	$save_button_disabled = '';
+	if (defined('GEOIP2DB_LICENSE_KEY') && !empty(GEOIP2DB_LICENSE_KEY)) {
+		$disable_license_field = 'disabled';
+		$save_button_disabled = 'disabled';
+	}
+	
 	
 	?><form name="updategeoip2db" action="#updategeoip2db" method="post">
 		<input type="hidden" name="action" value="updategeoip2db" />
@@ -620,10 +630,13 @@ function iqblockcountry_settings_tools() {
 	<form name="setgeoip2dblicense" action="#setgeoip2dblicense" method="post">
 		<input type="hidden" name="action" value="setgeoip2dblicense" />
 		<input name="setgeoip2dblicense_nonce" type="hidden" value="<?php echo wp_create_nonce('setgeoip2dblicense_nonce');?>" />
-		<input name="setgeoip2dblicense_key" type="text" placeholder="License key" value="<?php echo $maxmind_license_key;?>" />
-		<input type="submit" class="button" name="save" value="<?php echo __('Save', 'iq-block-country');?>"/>
-		<?php wp_nonce_field('iqblockcountry');?>
-	</form><?php
+		<input name="setgeoip2dblicense_key" type="text" placeholder="License key" value="<?php if (empty($save_button_disabled)) { echo $maxmind_license_key; } else { echo '****************'; }?>" <?php echo $disable_license_field;?>/>
+		<input type="submit" class="button" name="save" value="<?php echo __('Save', 'iq-block-country');?>" <?php echo $save_button_disabled;?>/><?php
+		// In order to prevent updates of the license key include nonce field only if the save button is not disabled.
+		if (empty($save_button_disabled)) {
+			wp_nonce_field('iqblockcountry');
+		}
+	?></form><?php
 }
 
 
