@@ -163,7 +163,9 @@ function UnpackGeoIP2DBfile() {
 					fclose($fr);
 					
 					// Delete gz-file.
-					unlink(GEOIP2DBFILE_GZIPPED);
+					if (CLEANUP_ON_UPDATE !== false) {
+						unlink(GEOIP2DBFILE_GZIPPED);
+					}
 					
 					return true;
 				}
@@ -803,8 +805,8 @@ function iqblockcountry_settings_categories() {
 		<table class="form-table" cellspacing="2" cellpadding="5" width="100%">			
 			<tr valign="top">
 				<th width="30%">
-					<?php _e('Do you want to block individual categories:', 'iq-block-country'); ?><br />
-					<?php _e('If you do not select this option all blog articles will be blocked.', 'iq-block-country'); ?>
+					<?php _e('Do you want to block individual categories:', 'iq-block-country'); ?><br/>
+					<em><?php _e('If you do not select this option all blog articles will be blocked.', 'iq-block-country');?></em>
 				</th>
 				<td width="70%">
 					<input type="checkbox" name="blockcountry_blockcategories" value="on" <?php checked('on', get_option('blockcountry_blockcategories'), true);?>/> 	
@@ -812,8 +814,8 @@ function iqblockcountry_settings_categories() {
 			</tr>
 			<tr valign="top">
 				<th width="30%">
-					<?php _e('Do you want to block the homepage:', 'iq-block-country'); ?><br />
-					<?php _e('If you do not select this option visitors will not be blocked from your homepage regardless of the categories you select.', 'iq-block-country'); ?>
+					<?php _e('Do you want to block the homepage:', 'iq-block-country'); ?><br/>
+					<em><?php _e('If you do not select this option visitors will not be blocked from your homepage regardless of the categories you select.', 'iq-block-country');?></em>
 				</th>
 				<td width="70%">
 					<input type="checkbox" name="blockcountry_blockhome" value="on" <?php checked('on', get_option('blockcountry_blockhome'), true);?>/> 	
@@ -906,7 +908,8 @@ function iqblockcountry_settings_posttypes() {
 		<table class="form-table" cellspacing="2" cellpadding="5" width="100%">
 			<tr valign="top">
 				<th width="30%">
-					<?php _e('Do you want to block individual post types:', 'iq-block-country'); ?><br />
+					<?php _e('Do you want to block individual post types:', 'iq-block-country');?><br/>
+					<em><?php _e('If you do not select this option all post types will be blocked.', 'iq-block-country');?></em>
 				</th>
 				<td width="70%">
 					<input type="checkbox" name="blockcountry_blockposttypes" value="on" <?php checked('on', get_option('blockcountry_blockposttypes'), true);?>/>
@@ -953,8 +956,9 @@ function iqblockcountry_settings_services() {
 			<tr valign="top">
 				<th width="30%">
 					<?php _e('Select which services you want to allow:', 'iq-block-country');?><br/>
-					<?php _e('This will allow a service like for instance a search engine to your site despite if you blocked the country.', 'iq-block-country');?><br />
-					<?php _e('Please note the "Search Engine Visibility" should not be selected in ', 'iq-block-country');?><a href="/wp-admin/options-reading.php"><?php _e('reading settings.', 'iq-block-country');?></a>
+					<em><?php _e('This will allow a service like for instance a search engine to your site despite if you blocked the country.', 'iq-block-country');?><br/>
+					<br/>
+					<?php _e('Please note the "Search Engine Visibility" should not be selected in ', 'iq-block-country');?><a href="<?php echo admin_url('/options-reading.php');?>"><?php _e('reading settings.', 'iq-block-country');?></a></em>
 				</th>
 				<td width="70%">
 					<ul><?php
@@ -1016,7 +1020,7 @@ function iqblockcountry_settings_frontend() {
 			<tr valign="top">
 				<th width="30%">
 					<?php _e('Block countries selected below:', 'iq-block-country');?><br/>
-					<?php _e('Block all countries except those selected below', 'iq-block-country');?>
+					<?php _e('Block all countries except those selected below:', 'iq-block-country');?>
 				</th>
 				<td width="70%">
 					<input type="radio" name="blockcountry_banlist_inverse" value="off" <?php checked('off', get_option('blockcountry_banlist_inverse'), true);?> <?php checked(FALSE, get_option('blockcountry_banlist_inverse'), true);?>/><br />
@@ -1026,7 +1030,7 @@ function iqblockcountry_settings_frontend() {
 			<tr valign="top">
 				<th scope="row" width="30%">
 					<?php _e('Select the countries:', 'iq-block-country');?><br/>
-					<?php _e('Use the CTRL key to select multiple countries', 'iq-block-country'); ?>
+					<em><?php _e('Use the CTRL key to select multiple countries', 'iq-block-country');?></em>
 				</th>
 				<td width="70%"><?php
 					$selected = '';
@@ -1063,20 +1067,30 @@ function iqblockcountry_settings_frontend() {
 			<tr valign="top">
 				<th width="30%">
 					<?php _e('Block tag pages:', 'iq-block-country');?><br/>
-					<?php _e('If you select this option tag pages will be blocked.', 'iq-block-country');?>
+					<em><?php _e('If you select this option tag pages will be blocked.', 'iq-block-country');?></em>
 				</th>
 				<td width="70%"><input type="checkbox" name="blockcountry_blocktag" <?php checked('on', get_option('blockcountry_blocktag'), true);?>/></td>
 			</tr>
 			<tr valign="top">
-				<th width="30%"><?php _e('Block feed:', 'iq-block-country');?><br/><?php _e('If you select this option feed pages will be blocked.', 'iq-block-country');?></th>
+				<th width="30%">
+					<?php _e('Block feed:', 'iq-block-country');?><br/>
+					<em><?php _e('If you select this option feed pages will be blocked.', 'iq-block-country');?></em>
+				</th>
 				<td width="70%"><input type="checkbox" name="blockcountry_blockfeed" <?php checked('on', get_option('blockcountry_blockfeed'), true);?>/></td>
 			</tr>
 			<tr valign="top">
-				<th width="30%"><?php _e('Frontend allowlist IPv4 and/or IPv6 addresses:', 'iq-block-country');?><br/><?php _e('Use a semicolon (;) to separate IP addresses', 'iq-block-country'); ?><br /><?php _e('This field accepts single IP addresses as well as ranges in CIDR format.', 'iq-block-country');?></th>
+				<th width="30%"><?php _e('Frontend allowlist IPv4 and/or IPv6 addresses:', 'iq-block-country');?><br/>
+					<em><?php _e('Use a semicolon (;) to separate IP addresses', 'iq-block-country'); ?><br/>
+					<?php _e('This field accepts single IP addresses as well as ranges in CIDR format.', 'iq-block-country');?></em>
+				</th>
 				<td width="70%"><textarea cols="70" rows="5" name="blockcountry_frontendwhitelist"><?php echo $frontendallowlist;?></textarea></td>
 			</tr>
 			<tr valign="top">
-				<th width="30%"><?php _e('Frontend blocklist IPv4 and/or IPv6 addresses:', 'iq-block-country'); ?><br /><?php _e('Use a semicolon (;) to separate IP addresses', 'iq-block-country'); ?><br /><?php _e('This field accepts single IP addresses as well as ranges in CIDR format.', 'iq-block-country');?></th>
+				<th width="30%">
+					<?php _e('Frontend blocklist IPv4 and/or IPv6 addresses:', 'iq-block-country'); ?><br/>
+					<em><?php _e('Use a semicolon (;) to separate IP addresses', 'iq-block-country'); ?><br/>
+					<?php _e('This field accepts single IP addresses as well as ranges in CIDR format.', 'iq-block-country');?></em>
+				</th>
 				<td width="70%"><textarea cols="70" rows="5" name="blockcountry_frontendblacklist"><?php echo $frontendblocklist;?></textarea></td>
 			</tr>
 			<tr>
@@ -1129,7 +1143,7 @@ function iqblockcountry_settings_backend() {
 			<tr valign="top">
 				<th width="30%">
 					<?php _e('Block countries selected below:', 'iq-block-country');?><br/>
-					<?php _e('Block all countries except those selected below', 'iq-block-country');?>
+					<?php _e('Block all countries except those selected below:', 'iq-block-country');?>
 				</th>
 				<td width="70%">
 					<input type="radio" name="blockcountry_backendbanlist_inverse" value="off" <?php checked('off', get_option('blockcountry_backendbanlist_inverse'), true);?> <?php checked(FALSE, get_option('blockcountry_backendbanlist_inverse'), true);?>/><br/>
@@ -1139,7 +1153,7 @@ function iqblockcountry_settings_backend() {
 			<tr valign="top">
 				<th scope="row" width="30%">
 					<?php _e('Select the countries:', 'iq-block-country');?><br />
-					<?php _e('Use the CTRL key to select multiple countries', 'iq-block-country');?>
+					<em><?php _e('Use the CTRL key to select multiple countries', 'iq-block-country');?></em>
 				</th>
 				<td width="70%"><?php
 					$selected = "";
@@ -1174,16 +1188,16 @@ function iqblockcountry_settings_backend() {
 			<tr valign="top">
 				<th width="30%">
 					<?php _e('Backend allowlist IPv4 and/or IPv6 addresses:', 'iq-block-country');?><br/>
-					<?php _e('Use a semicolon (;) to separate IP addresses', 'iq-block-country');?><br/>
-					<?php _e('This field accepts single IP addresses as well as ranges in CIDR format.', 'iq-block-country');?>
+					<em><?php _e('Use a semicolon (;) to separate IP addresses', 'iq-block-country');?><br/>
+					<?php _e('This field accepts single IP addresses as well as ranges in CIDR format.', 'iq-block-country');?></em>
 				</th>
 				<td width="70%"><textarea cols="70" rows="5" name="blockcountry_backendwhitelist"><?php echo $backendallowlist;?></textarea></td>
 			</tr>
 			<tr valign="top">
 				<th width="30%">
 					<?php _e('Backend blocklist IPv4 and/or IPv6 addresses:', 'iq-block-country');?><br/>
-					<?php _e('Use a semicolon (;) to separate IP addresses', 'iq-block-country'); ?><br/>
-					<?php _e('This field accepts single IP addresses as well as ranges in CIDR format.', 'iq-block-country');?>
+					<em><?php _e('Use a semicolon (;) to separate IP addresses', 'iq-block-country'); ?><br/>
+					<?php _e('This field accepts single IP addresses as well as ranges in CIDR format.', 'iq-block-country');?></em>
 				</th>
 				<td width="70%"><textarea cols="70" rows="5" name="blockcountry_backendblacklist"><?php echo $backendblocklist;?></textarea></td>
 			</tr>
@@ -1558,7 +1572,8 @@ function iqblockcountry_settings_page() {
 		$active_tab = 'home';
 	}
 	
-	?><h2 class="nav-tab-wrapper">
+	?><link rel="stylesheet" href="<?php echo IQBLOCKCSS;?>" type="text/css"/>
+	<h2 class="nav-tab-wrapper">
 		<a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=home" class="nav-tab <?php echo $active_tab == 'home' ? 'nav-tab-active' : ''; ?>"><?php _e('Home', 'iq-block-country'); ?></a>
 		<a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=frontend" class="nav-tab <?php echo $active_tab == 'frontend' ? 'nav-tab-active' : ''; ?>"><?php _e('Frontend', 'iq-block-country'); ?></a>
 		<a href="?page=iq-block-country/libs/blockcountry-settings.php&tab=backend" class="nav-tab <?php echo $active_tab == 'backend' ? 'nav-tab-active' : ''; ?>"><?php _e('Backend', 'iq-block-country'); ?></a><?php
