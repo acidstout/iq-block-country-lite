@@ -1,4 +1,8 @@
 ## Changes
+1.2.11.2
+* Bugfix: Fixed link to "Reading" settings on "Services" tab.
+* Change: Removed bold fonts in order to impürove readability.
+
 1.2.11.1
 * Change: Added PHP 8 compatibility.
 
