@@ -1,4 +1,8 @@
 ## Changes
+= 1.2.12.1 =
+* Change: Added/updated some service names.
+* Security fix: Remove uploaded files after import.
+
 1.2.11.3
 * Change: Always override a Maxmind license key in the DB with the one from wp-config.php if defined.
 * Security fix: Properly disable update of the license key field and show a dummy license key if a license key has been defined in wp-config.php.

@@ -743,7 +743,18 @@ function iqblockcountry_settings_importexport() {
 					echo "<div class='notice notice-success'><p>" . __("All options are restored successfully.", 'iq-block-country') . "</p></div>";  
 				} else {  
 					echo "<div class='notice notice-error'><p>" . __("Invalid file.", 'iq-block-country') ."</p></div>";  
-				}  
+				}
+				
+				// 2021-07-29, nrekow: Remove uploaded files after import.
+				foreach ($unzipped as $zipfile) {
+					if (file_exists($zipfile['filename'])) {
+						unlink($zipfile['filename']);
+					}
+				}
+				
+				if (file_exists($dir['path'] . $_FILES['import']['name'])) {
+					unlink($dir['path'] . $_FILES['import']['name']);
+				}
 			}  
 		}
 	} else {
