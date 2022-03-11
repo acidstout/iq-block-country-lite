@@ -1,17 +1,26 @@
 <?php
 /**
- * Whoisip extension
+ * WhoisIp extension
  * 
  * GET and POST requests work.
- * So, we can do a simple https://www.ultratools.com/tools/ipWhoisLookupResult?ipAddress=54.39.77.167 in an iframe. :)
+ * So, we can do a simple https://ipwhois.app/json/54.39.77.167 and evaluate the JSON which we get as response. :)
+ * 
+ * Keep in mind that ipwhois.app has limited free requests to a maximum of 10,000 per month. You can see the request count in their API response.
  *
  * @author nrekow
  * 
  */
 
-function nl2nl($string, $nl = "\n") {
-	$string = str_replace(array("\r\n", "\r", "\n"), $nl, $string);
-	return $string;
+/**
+ * Replace all new-line characters with UNIX-style new-line characters. 
+ * 
+ * @param string $str
+ * @param string $nl
+ * @return mixed
+ */
+function nl2nl($str, $nl = "\n") {
+	$str = str_replace(array("\r\n", "\r", "\n"), $nl, $str);
+	return $str;
 }
 
 
@@ -20,30 +29,36 @@ if (!isset($_REQUEST['ajax']) || empty($_REQUEST['ajax'])) {
 	die();
 }
 
-// Fallback ip-address.
-//$ipAddress = '54.39.77.167';
 
 // Check if a valid ip has been specified.
 if (isset($_REQUEST['ip']) && !empty($_REQUEST['ip'])) {
 	if (preg_match('/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/', trim($_REQUEST['ip'])) !== false) {
 		$ipAddress = $_REQUEST['ip'];
 
-		// Do cURL request.
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, 'https://www.ultratools.com/tools/ipWhoisLookupResult');
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array('ipAddress' => $ipAddress)));
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Receive server response
-		$html = curl_exec($ch);
-		curl_close($ch);
-		
-		// Clean output.
-		$html = nl2nl($html);
-		$html = str_replace("\t", '', $html);
-		$html = str_replace(' >', '>', $html);
-		$html = str_replace('> <', '><', $html);
-		$html = substr($html, strpos($html, '<div class="tool-results">'));
-		$html = substr($html, 0, strpos($html, '<iframe'));
+		if (isset($_REQUEST['gethostname']) && !empty($_REQUEST['gethostname'])) {
+			// For now this is never used anywhere.
+			$html = gethostbyaddr($ipAddress);
+		} else {
+			// Do a cURL request against the API.
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, 'https://ipwhois.app/json/' . $ipAddress);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Receive server response
+			$response = curl_exec($ch);
+			curl_close($ch);
+			
+			// Decode JSON
+			$json = json_decode($response, true, JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_UNESCAPED_UNICODE);
+			
+			// Prepare outpot (e.g. make it look nice)
+			$html = 'Failed to decode server response.';
+			if ($json !== null && $json !== false) {
+				$html = '';
+				foreach ($json as $key => $value) {
+					$html .= '<strong>' . ucfirst(str_replace('_', ' ', $key)) . ':</strong> ' . $value . '<br/>';
+				}
+			}
+			
+		}
 		
 		// Show result.
 		echo $html;

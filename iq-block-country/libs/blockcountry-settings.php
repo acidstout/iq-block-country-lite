@@ -541,6 +541,9 @@ function iqblockcountry_settings_tools() {
 							$ipcheck_result .= '<br/>';
 						}
 					}
+				} else {
+					$ipcheck_result .= '<p>' . __('This does not seem to be a valid IP address.', 'iq-block-country') . '</p>';
+					$ipcheck_result .= '<br/>';
 				}
 				break;
 				
@@ -569,7 +572,7 @@ function iqblockcountry_settings_tools() {
 		<input name="ipcheck_nonce" type="hidden" value="<?php echo wp_create_nonce('ipcheck_nonce'); ?>" />
 		<?php _e('IP Address to check:', 'iq-block-country'); ?> <input type="text" name="ipaddress" lenth="50" /><?php 
 
-		echo $ipcheck_result;
+		echo ' &nbsp; ' . $ipcheck_result;
 
 		echo '<div class="submit"><input type="submit" class="button" name="test" value="' . __( 'Check IP address', 'iq-block-country' ) . '" /></div>';
 		wp_nonce_field('iqblockcountry');
