@@ -1,4 +1,7 @@
 ## Changes
+= 1.2.12.2 =
+* Updated WhoIs API service.
+
 = 1.2.12.1 =
 * Change: Added/updated some service names.
 * Security fix: Remove uploaded files after import.
