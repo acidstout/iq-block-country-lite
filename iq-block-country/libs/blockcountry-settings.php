@@ -577,7 +577,7 @@ function iqblockcountry_settings_tools() {
 		echo '<div class="submit"><input type="submit" class="button" name="test" value="' . __( 'Check IP address', 'iq-block-country' ) . '" /></div>';
 		wp_nonce_field('iqblockcountry');
 	?></form>
-	<hr />
+	<hr/>
 	<h3><?php _e('Database information', 'iq-block-country'); ?></h3><?php
 		
 	$format = get_option('date_format') . ' ' . get_option('time_format');
@@ -639,7 +639,29 @@ function iqblockcountry_settings_tools() {
 		if (empty($save_button_disabled)) {
 			wp_nonce_field('iqblockcountry');
 		}
-	?></form><?php
+	?></form>
+	<br/>
+	<hr/><?php 
+	
+	$blocked_backend = get_option('blockcountry_backendnrblocks');
+	$blocked_frontend = get_option('blockcountry_frontendnrblocks');
+	?><h3><?php _e('Reset Counters', 'iq-block-country');?></h3>
+	<div id="icon-tools" class="icon32"><br /></div>  
+		<p><?php _e('When you click on the <tt>Reset Counter</tt> button the counters of total Frontend & Backend blocks will be set to 0.', 'iq-block-country');?></p>  
+		<p><?php echo number_format($blocked_backend);?> <?php _e('visitors blocked from the backend.', 'iq-block-country');?></p>
+		<p><?php echo number_format($blocked_frontend);?> <?php _e('visitors blocked from the frontend.', 'iq-block-country');?></p>
+        <form method="post">  
+			<?php wp_nonce_field('iqblockresetcounter');?>  
+			<p class="submit">  
+				<input type="submit" class="button" name="resetcounter" value="<?php _e('Reset Counter', 'iq-block-country');?>"/>  
+			</p>  
+		</form>  
+	</div><?php
+	if ((isset($_POST['resetcounter'])) && (check_admin_referer('iqblockresetcounter'))) {
+		update_option('blockcountry_backendnrblocks',0);
+		update_option('blockcountry_frontendnrblocks',0);
+		_e("Counters reset", 'iq-block-country');
+	}
 }
 
 
@@ -678,8 +700,10 @@ function iqblockcountry_settings_importexport() {
 	} elseif (isset($_POST['export'])) {  
   		$blogname = str_replace(" ", "", get_option('blogname'));  
 		$date = date("d-m-Y");  
-		$json_name = $blogname."-".$date; // Namming the filename will be generated.  
-  
+		$randstr = rand();
+		$resultrand = sha1($randstr);
+		$json_name = $blogname . '-' . $date . '-' . $resultrand; // Filename will be generated with random string.
+		
 		$optarr = iqblockcountry_get_options_arr();
 		$need_options = array();
 		foreach ( $optarr as $options ) {
@@ -699,15 +723,17 @@ function iqblockcountry_settings_importexport() {
 
 		fclose( $handle );
 
-		require_once( ABSPATH . 'wp-admin/includes/class-pclzip.php' );
-
 		chdir( $dir['path'] );
-		$zip = new PclZip( './' . $json_name . '-iqblockcountry.zip' );
-		
-		if ( $zip->create( './' . 'iqblockcountry.ini' ) == 0 ) {
-			wp_die(__("Something went wrong exporting this file", 'iq-block-country'));
+		$zipfiles = array('iqblockcountry.ini');
+		$zipfilename = $dir['path'] . '/' . $json_name . '-iqblockcountry.zip';
+		$zip = new ZipArchive;
+		$zip->open($zipfilename, ZipArchive::CREATE);
+		foreach ($zipfiles as $file) {
+			$zip->addFile($file);
 		}
-
+		$zip->close();
+		unlink($dir['path'] . '/iqblockcountry.ini');
+		
 		$url = $dir['url'] . '/' . $json_name . '-iqblockcountry.zip';
 		$content = "<div class='notice notice-success'><p>" . __("Exporting settings...", 'iq-block-country') . "</p></div>";
 
@@ -722,43 +748,37 @@ function iqblockcountry_settings_importexport() {
 		$optarr = iqblockcountry_get_options_arr();
 		
 		if (isset($_FILES['import']) && check_admin_referer('iqblockimport')) {  
-			if ($_FILES['import']['error'] > 0) {  
+			if ( ($_FILES['import']['error'] > 0)  && ($_FILES['type'] == "application/x-zip-compressed") ) {  
 				wp_die(__("Something went wrong importing this file", 'iq-block-country'));  
 			} else {
-				require_once( ABSPATH . 'wp-admin/includes/class-pclzip.php' );
-				$zip = new PclZip( $_FILES['import']['tmp_name'] );
-				$unzipped = $zip->extract( $p_path = $dir['path'] );
+				$zip = new ZipArchive;
+				$res = $zip->open($_FILES['import']['tmp_name']);
 				
-				if ( $unzipped[0]['stored_filename'] == 'iqblockcountry.ini' ) {
-					$encode_options = file_get_contents($dir['path'] . '/iqblockcountry.ini');  
-					$options = json_decode($encode_options, true);  
+				if ($res === TRUE) {
+					$zip->extractTo($dir['path'], 'iqblockcountry.ini');
+					$zip->close();
+				} else {
+					wp_die(__("Something went wrong importing this file", 'iq-block-country'));
+				}
+				
+				if (file_exists($dir['path'] . '/iqblockcountry.ini')) {
+					$encode_options = file_get_contents($dir['path'] . '/iqblockcountry.ini');
+					$options = json_decode($encode_options, true);
 					
-					foreach ($options as $key => $value) {  
-						if (in_array($key,$optarr)) { 
-							update_option($key, $value);  
+					foreach ($options as $key => $value) {
+						if (in_array($key,$optarr)) {
+							update_option($key, $value);
 						}
 					}
 					
-					if (file_exists($dir['path'] . '/iqblockcountry.ini')) {
-						unlink($dir['path'] . '/iqblockcountry.ini');
-					}
-					
-					echo "<div class='notice notice-success'><p>" . __("All options are restored successfully.", 'iq-block-country') . "</p></div>";  
-				} else {  
-					echo "<div class='notice notice-error'><p>" . __("Invalid file.", 'iq-block-country') ."</p></div>";  
+					unlink($dir['path'] . '/iqblockcountry.ini');
+					echo "<div class='notice notice-success'><p>" . __("All options are restored successfully.", 'iq-block-country') . "</p></div>";
+				} else {
+					wp_die(__("ZIP File did not contain any settings", 'iq-block-country'));
 				}
-				
-				// 2021-07-29, nrekow: Remove uploaded files after import.
-				foreach ($unzipped as $zipfile) {
-					if (file_exists($zipfile['filename'])) {
-						unlink($zipfile['filename']);
-					}
-				}
-				
-				if (file_exists($dir['path'] . $_FILES['import']['name'])) {
-					unlink($dir['path'] . $_FILES['import']['name']);
-				}
-			}  
+			}
+		} else {
+			wp_die(__("Something went wrong importing this file", 'iq-block-country'));
 		}
 	} else {
 		wp_die(__("No correct import or export option given.", 'iq-block-country'));
