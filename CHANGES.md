@@ -1,4 +1,7 @@
 ## Changes
+= 1.2.13.1 =
+* Updated zip-extraction method when importing backups
+
 = 1.2.12.2 =
 * Updated WhoIs API service.
 
