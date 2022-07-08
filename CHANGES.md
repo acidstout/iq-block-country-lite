@@ -1,4 +1,7 @@
 ## Changes
+= 99.1.2.13.1 =
+* This version is solely meant to disable overwriting this version with updates from the WordPress plugins repository. Pascal introduced too many changes of questionable necessity and quality in release 1.2.17. Reading his code gave me eye-cancer and a stroke.
+
 = 1.2.13.1 =
 * Updated zip-extraction method when importing backups
 
