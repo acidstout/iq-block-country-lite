@@ -1,4 +1,10 @@
 ## Changes
+= 99.1.2.13.3 =
+* Fixed geo-ip database not being downloaded due to changes by Maxmind regarding their infrastructure.
+
+= 99.1.2.13.2 =
+* I can't remember what I changed, but I swear it was necessary.
+
 = 99.1.2.13.1 =
 * This version is solely meant to disable overwriting this version with updates from the WordPress plugins repository. Pascal introduced too many changes of questionable necessity and quality in release 1.2.17. Reading his code gave me eye-cancer and a stroke.
 

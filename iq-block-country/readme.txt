@@ -3,7 +3,7 @@ Contributors: iqpascal, nrekow
 Tags: spam, block, country, comments, ban, geo, geo blocking, geo ip, block country, block countries, ban countries, ban country, allow list, block list, security
 Requires at least: 3.5.2
 Tested up to: 5.7
-Stable tag: 1.2.13.1
+Stable tag: 1.2.13.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 5.6

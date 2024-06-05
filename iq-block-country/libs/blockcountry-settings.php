@@ -108,6 +108,7 @@ function DownloadGeoIP2DBfile() {
 			// Download file and write it to destination file.
 			curl_setopt($ch, CURLOPT_FILE, $fp);
 			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 			if (curl_exec($ch) !== false) {
 				$curl_response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 				error_log('HTTP response code: ' . $curl_response_code);
